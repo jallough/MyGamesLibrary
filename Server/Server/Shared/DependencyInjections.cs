@@ -1,6 +1,8 @@
 ﻿using Server.DBContext;
 using Server.Games.Repositories;
 using Server.Games.Services;
+using Server.Users.Repositories;
+using Server.Users.Services;
 
 namespace Server.Shared
 {
@@ -12,6 +14,8 @@ namespace Server.Shared
             services.AddScoped<IDataContext, AppDBContext>();
             services.AddScoped<IGamesServices, GamesServices>();
             services.AddScoped<IGamesRepository, GamesRepository>();
+            services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IUsersRepository, UsersRepository>();
             return services;
         }
     }

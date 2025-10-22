@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.DBContext;
@@ -39,7 +40,7 @@ public class GamesController : ControllerBase
             return NotFound();
         return Ok(game);
     }
-
+    [Authorize(Roles ="Admin")]
     // POST: api/games
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] GamesEntity game)

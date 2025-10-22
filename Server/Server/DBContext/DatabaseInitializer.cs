@@ -13,7 +13,11 @@ namespace Server.DBContext
                     await context.Database.MigrateAsync();
                     logger.LogInformation("Base de données créée/migrée avec succès.");
                 }
-                
+                if (configuration.GetValue<bool>("Initialize"))
+                {
+                    
+                }
+
             }
             catch (Exception ex)
             {

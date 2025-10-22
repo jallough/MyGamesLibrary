@@ -1,0 +1,42 @@
+﻿{
+  "Users": [
+    {
+      "UserName": "test",
+      "Email": "test@test.com",
+      "Password": "test",
+      "Role": "Admin"
+    }
+  ],
+  "Games": [
+    {
+      "Title": "Marvel's Spider-Man 2",
+      "Genre": "Action",
+      "ReleaseDate": "20.10.2023",
+      "ImageUrl": "https://gaming-cdn.com/images/products/15416/orig/marvel-s-spider-man-2-playstation-5-spiel-playstation-store-vereinigte-staaten-cover.jpg?v=1743428960"
+    },
+    {
+      "Title": "Forza Horizon 5",
+      "Genre": "Sports",
+      "ReleaseDate": "09.11.2021",
+      "ImageUrl": "https://xboxwire.thesourcemediaassets.com/sites/3/Forza_gamescom_HERO-1.jpg"
+    },
+    {
+      "Title": "The Legend of Zelda: Tears of the Kingdom",
+      "Genre": "Adventure",
+      "ReleaseDate": "12.05.2023",
+      "ImageUrl": "https://mag.shock2.info/wp-content/uploads/2023/05/1280x720.jpg"
+    },
+    {
+      "Title": "Pokémon Scarlet & Violet",
+      "Genre": "RPG",
+      "ReleaseDate": "18.11.2022",
+      "ImageUrl": "https://www.wog.ch/nas/specials/large/pokemonkarmesinpurpur.jpg"
+    },
+    {
+      "Title": "Astro Bot",
+      "Genre": "Adventure",
+      "ReleaseDate": "06.09.2024",
+      "ImageUrl": "https://www.gameaccessibilitynexus.com/wp-content/uploads/2024/09/Astro-Bot-Header-02.png"
+    }
+  ]
+}

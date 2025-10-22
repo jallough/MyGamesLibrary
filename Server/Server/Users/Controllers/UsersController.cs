@@ -7,13 +7,8 @@ namespace Server.Users.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController(IUsersService _usersService) : ControllerBase
     {
-        private readonly IUsersService _usersService;
-        public UsersController(IUsersService usersService)
-        {
-            _usersService = usersService;
-        }
 
         [HttpPost("add")]
         public async Task<IActionResult> AddUser([FromBody] UserEntity userEntity)

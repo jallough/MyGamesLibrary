@@ -4,14 +4,8 @@ using Server.Users.Entities;
 
 namespace Server.Users.Repositories
 {
-    public class UsersRepository: IUsersRepository
+    public class UsersRepository(IDataContext _dbContext) : IUsersRepository
     {
-        private readonly IDataContext _dbContext;
-        public UsersRepository(IDataContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
-
         public async Task AddUser(UserEntity userEntity)
         {
             try { 

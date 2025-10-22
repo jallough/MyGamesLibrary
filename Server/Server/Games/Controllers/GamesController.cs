@@ -25,12 +25,27 @@ public class GamesController : ControllerBase
         var games = await _gamesServices.GetAllAsync();
         return Ok(games);
     }
-    [HttpGet]
+    [HttpGet("Load")]
     public async Task<IActionResult> GetGamesPaged([FromQuery] int page, [FromQuery] int number)
     {
         var games = await _gamesServices.GetAllAsync(page, number);
         return Ok(games);
     }
+    [HttpGet("user/{id}")]
+    public async Task<IActionResult> GetAllByUser()
+    {
+        // TODO: Filter by user
+        var games = await _gamesServices.GetAllAsync();
+        return Ok(games);
+    }
+    [HttpGet("user/Load")]
+    public async Task<IActionResult> GetGamesPagedByUser([FromQuery] int page, [FromQuery] int number)
+    {
+        //TODO: Filter by user
+        var games = await _gamesServices.GetAllAsync(page, number);
+        return Ok(games);
+    }
+    [Authorize(Roles = "Admin")]
     // GET: api/games/5
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById([FromHeader] long id)
@@ -64,7 +79,7 @@ public class GamesController : ControllerBase
         }
         return Created();
     }
-
+    [Authorize(Roles = "Admin")]
     // PUT: api/games/5
     [HttpPut("{id}")]
     public async Task<IActionResult> Update([FromHeader] long id,[FromBody] GamesEntity updated)
@@ -85,7 +100,7 @@ public class GamesController : ControllerBase
 
         return Ok();
     }
-
+    [Authorize(Roles = "Admin")]
     // DELETE: api/games/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete([FromHeader] long id)

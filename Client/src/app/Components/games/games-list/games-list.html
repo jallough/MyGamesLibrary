@@ -1,3 +1,29 @@
+<div class="toolbar">
+		<mat-form-field >
+      <mat-label>Order By</mat-label>
+      <mat-select>
+        @for (opt of orderByOptions; track opt) {
+          <mat-option [value]="opt.value">{{opt.label}}</mat-option>
+        }
+  </mat-select>
+</mat-form-field>
+<mat-form-field style="padding: 0px 10px;">
+      <mat-label>Filter By Categories</mat-label>
+      <mat-select>
+        @for (opt of filterByCategoryOptions; track opt) {
+          <mat-option [value]="opt.value">{{opt.label}}</mat-option>
+        }
+  </mat-select>
+</mat-form-field>
+<mat-form-field>
+      <mat-label>Filter By Status</mat-label>
+      <mat-select>
+        @for (opt of filterByOptions; track opt) {
+          <mat-option [value]="opt.value">{{opt.label}}</mat-option>
+        }
+  </mat-select>
+</mat-form-field>
+</div>
 <div class="cards">
   <mat-card *ngFor="let g of games" class="game-card">
     <img mat-card-image *ngIf="g.imageUrl" [src]="g.imageUrl" alt="{{g.name}}" />
@@ -7,7 +33,6 @@
     </mat-card-header>
     <mat-card-content>
       <p>Release: {{ g.releaseDate | date:'dd.MM.yyyy'}}</p>
-      <p>Status: {{ GameStatus[g.status] }}</p>
     </mat-card-content>
     <mat-card-actions *ngIf="showActions">
       <button mat-button color="primary" (click)="edit.emit(g)"><mat-icon svgIcon="edit"></mat-icon>Edit</button>

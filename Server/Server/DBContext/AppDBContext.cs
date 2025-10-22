@@ -8,6 +8,8 @@ public class AppDBContext: DbContext,IDataContext
 {
     public DbSet<GamesEntity> Games { get; set; }
     public DbSet<UserEntity> Users { get; set; }
+    public DbSet<GamesUserRelationEntity> GamesUserRelations { get; set; }
+
     public AppDBContext(DbContextOptions<AppDBContext> options) : base(options){}
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

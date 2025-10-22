@@ -4,16 +4,11 @@ using Server.Games.Entities;
 
 namespace Server.Games.Repositories
 {
-    public class GamesRepository: IGamesRepository
+    public class GamesRepository(IDataContext _context) : IGamesRepository
     {
-        private readonly IDataContext _context;
-        public GamesRepository(IDataContext context) {
-            _context = context;
-        }
-
         private IQueryable<GamesEntity> GetAll()
         {
-            return _context.Games.OrderBy(g=>g.ReleaseDate);
+            return _context.Games.OrderByDescending(g=>g.ReleaseDate);
         }
         public async Task<List<GamesEntity>> GetAllAsync()
         {

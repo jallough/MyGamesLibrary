@@ -10,20 +10,8 @@ using System.Text;
 
 namespace Server.Users.Services
 {
-    public class UsersService : IUsersService
+    public class UsersService(IUsersRepository _usersRepository, ILogger<UsersService> _logger, IMapper _mapper, IConfiguration _config) : IUsersService
     {
-        private readonly IUsersRepository _usersRepository;
-        private readonly ILogger<UsersService> _logger;
-        private readonly IMapper _mapper;
-        private readonly IConfiguration _config;
-        public UsersService(IUsersRepository usersRepository, ILogger<UsersService> logger, IMapper mapper, IConfiguration config)
-        {
-            _usersRepository = usersRepository;
-            _logger = logger;
-            _mapper = mapper;
-            _config = config;
-        }
-
         public async Task AddUser(UserEntity userEntity)
         {
             try

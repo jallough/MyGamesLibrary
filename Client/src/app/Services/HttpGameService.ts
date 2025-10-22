@@ -12,6 +12,17 @@ export class HttpGameService {
         return this.http.get<GamesDto[]>('Games');
     }
 
+    getAvailableGames(): Observable<GamesDto[]> {
+        return this.http.get<GamesDto[]>('Games/available');
+    }
+
+    getGamesByUser(userId: number): Observable<GamesDto[]> {
+        return this.http.get<GamesDto[]>(`Games/user/${userId}`);
+    }
+    getGamesByCategory(categoryId: number): Observable<GamesDto[]> {
+        return this.http.get<GamesDto[]>(`Games/category/${categoryId}`);
+    }
+
     // GET api/games/{id}
     getById(id: number): Observable<GamesDto> {
         return this.http.get<GamesDto>(`Games/${id}`);

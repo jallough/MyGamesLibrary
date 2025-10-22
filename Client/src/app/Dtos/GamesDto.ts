@@ -4,7 +4,7 @@ export class GamesDto {
     genre!: GameGenre;
     releaseDate!: string;
     imageUrl!: string;
-    status!: GameStatus;
+    status?: GameStatus;
 }
 
 export enum GameStatus {

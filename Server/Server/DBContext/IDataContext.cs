@@ -8,6 +8,8 @@ namespace Server.DBContext
     {
         public DbSet<GamesEntity> Games { get; set; }
         public DbSet<UserEntity> Users { get; set; }
+        public DbSet<GamesUserRelationEntity> GamesUserRelations { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

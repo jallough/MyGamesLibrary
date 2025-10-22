@@ -1,0 +1,6 @@
+<div class="toolbar">
+		<h2>Games</h2>
+		<button mat-raised-button color="primary" (click)="openAdd()"><mat-icon svgIcon="add"></mat-icon >Add</button>
+	</div>
+
+<app-games-list *ngIf="!loading()" [games]="games" [showActions]="true" (edit)="openEdit($event)" (delete)="deleteGame($event)"></app-games-list>

@@ -1,0 +1,46 @@
+.drawer {
+  width: auto;
+  height: 100vh;
+  /* The background property is added to clearly distinguish the borders between drawer and main
+     content */
+  background: #eee;
+}
+
+.a{
+  width: -webkit-fill-available;
+}
+
+/* Make mat-button-like anchors rectangular with left-aligned text */
+
+/* Ensure the toolbar row doesn't add extra padding so children can fill it */
+mat-toolbar-row {
+  padding: 0; /* remove default padding */
+}
+
+/* Make the anchor fill the toolbar-row area completely */
+a[matButton], a.mat-button, .a {
+  display: block; /* full-width block so text alignment works reliably */
+  width: 100%;
+  height: 63px; /* match typical toolbar row height; adjust if your toolbar is different */
+  line-height: 63px; /* vertically center single-line text */
+  padding: 0 16px; /* horizontal padding only */
+  border-radius: 0; /* keep perfectly rectangular */
+  background: transparent;
+  text-align: left; /* left-align the button text */
+  text-decoration: none; /* remove underline from anchor */
+  box-sizing: border-box;
+}
+
+/* Hover / focus states */
+a[matButton]:hover, a.mat-button:hover, .a:hover,
+a[matButton]:focus, a.mat-button:focus, .a:focus {
+  background: rgba(0,0,0,0.04);
+  border-color: #bfbfbf;
+  outline: none;
+}
+
+/* Active state */
+a[matButton].active, a.mat-button.active, .a.active,
+a[matButton]:active, a.mat-button:active, .a:active {
+  background: rgba(0,0,0,0.06);
+}

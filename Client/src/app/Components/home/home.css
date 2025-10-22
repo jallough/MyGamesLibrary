@@ -1,0 +1,22 @@
+.loading {
+	padding: 16px;
+	font-weight: 600;
+}
+
+.cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+	gap: 16px;
+	padding: 16px;
+}
+
+.game-card img {
+	max-height: 160px;
+	object-fit: cover;
+}
+
+.game-card {
+	display: flex;
+	flex-direction: column;
+}
+

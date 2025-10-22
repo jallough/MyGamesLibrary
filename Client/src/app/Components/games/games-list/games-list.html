@@ -1,0 +1,17 @@
+<div class="cards">
+  <mat-card *ngFor="let g of games" class="game-card">
+    <img mat-card-image *ngIf="g.imageUrl" [src]="g.imageUrl" alt="{{g.name}}" />
+    <mat-card-header>
+      <mat-card-title>{{ g.name }}</mat-card-title>
+      <mat-card-subtitle>Genre: {{ GameGenre[g.genre] }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>Release: {{ g.releaseDate | date:'dd.MM.yyyy'}}</p>
+      <p>Status: {{ GameStatus[g.status] }}</p>
+    </mat-card-content>
+    <mat-card-actions *ngIf="showActions">
+      <button mat-button color="primary" (click)="edit.emit(g)"><mat-icon svgIcon="edit"></mat-icon>Edit</button>
+      <button mat-button color="warn" (click)="delete.emit(g.id)"><mat-icon svgIcon="delete"></mat-icon> Delete</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

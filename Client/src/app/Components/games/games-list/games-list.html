@@ -1,7 +1,7 @@
 <div class="toolbar">
 		<mat-form-field >
       <mat-label>Order By</mat-label>
-      <mat-select>
+      <mat-select (selectionChange)="onOrderByChange($event.value)">
         @for (opt of orderByOptions; track opt) {
           <mat-option [value]="opt.value">{{opt.label}}</mat-option>
         }
@@ -9,26 +9,30 @@
 </mat-form-field>
 <mat-form-field style="padding: 0px 10px;">
       <mat-label>Filter By Categories</mat-label>
-      <mat-select>
+      <mat-select (selectionChange)="onFilterByChange($event.value)">
         @for (opt of filterByCategoryOptions; track opt) {
           <mat-option [value]="opt.value">{{opt.label}}</mat-option>
         }
   </mat-select>
 </mat-form-field>
 <mat-form-field>
-      <mat-label>Filter By Status</mat-label>
-      <mat-select>
+      <mat-label >Filter By Status</mat-label>
+      <mat-select (selectionChange)="onFilterByChange($event.value)">
         @for (opt of filterByOptions; track opt) {
           <mat-option [value]="opt.value">{{opt.label}}</mat-option>
         }
   </mat-select>
 </mat-form-field>
+<mat-form-field style="padding: 0px 10px;">
+  <mat-label>Search</mat-label>
+  <input matInput  placeholder="Search" [formControl]="searchControl"/>
+</mat-form-field>
 </div>
 <div class="cards">
   <mat-card *ngFor="let g of games" class="game-card">
-    <img mat-card-image *ngIf="g.imageUrl" [src]="g.imageUrl" alt="{{g.name}}" />
+    <img mat-card-image *ngIf="g.imageUrl" [src]="g.imageUrl" alt="{{g.title}}" />
     <mat-card-header>
-      <mat-card-title>{{ g.name }}</mat-card-title>
+      <mat-card-title>{{ g.title }}</mat-card-title>
       <mat-card-subtitle>Genre: {{ GameGenre[g.genre] }}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>

@@ -1,6 +1,6 @@
 export class GamesDto {
     id!: number;
-    name!: string;
+    title!: string;
     genre!: GameGenre;
     releaseDate!: string;
     imageUrl!: string;

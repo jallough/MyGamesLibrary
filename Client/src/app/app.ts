@@ -5,7 +5,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button'; 
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
+import { BreakpointObserver } from '@angular/cdk/layout';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, MatSidenavModule, MatToolbarModule, MatDividerModule, MatButtonModule, MatIconModule],
@@ -14,4 +14,18 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class App {
   protected readonly title = signal('AngularApp');
+  drawerMode: 'side' | 'over' = 'side';
+  isOpened = true;
+
+  constructor(private breakpointObserver: BreakpointObserver) {
+    this.breakpointObserver.observe(['(max-width: 768px)']).subscribe(result => {
+      if (result.matches) {
+        this.drawerMode = 'over';
+        this.isOpened = false;
+      } else {
+        this.drawerMode = 'side';
+        this.isOpened = true;
+      }
+    });
+  }
 }

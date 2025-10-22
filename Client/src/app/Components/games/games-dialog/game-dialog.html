@@ -2,8 +2,8 @@
 <mat-dialog-content class="dialog-content">
   <form [formGroup]="form">
     <mat-form-field appearance="fill" class="full">
-      <mat-label>Name</mat-label>
-      <input matInput formControlName="name" />
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" />
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="full">
@@ -23,6 +23,13 @@
     <mat-form-field appearance="fill" class="full">
       <mat-label>Image URL</mat-label>
       <input matInput formControlName="imageUrl" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option *ngFor="let s of statusOptions" [value]="s.value">{{ s.label }}</mat-option>
+      </mat-select>
     </mat-form-field>
   </form>
 </mat-dialog-content>

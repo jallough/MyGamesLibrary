@@ -63,7 +63,7 @@ export class GameDialog {
       // Convert numeric enum values to their names for the form fields
       const rd = data.game.releaseDate ? new Date(data.game.releaseDate) : '';
       this.form.patchValue({
-        name: data.game.name,
+        title: data.game.title,
         genre: data.game.genre,
         releaseDate: rd,
         imageUrl: data.game.imageUrl,
@@ -103,7 +103,7 @@ export class GameDialog {
     // Use PascalCase keys to match the server model exactly (Name, Genre, ReleaseDate, ImageUrl, Status)
     const finalPayload: any = {
       Id : this.data.game?.id ?? 0,
-      Name: payload.name ?? '',
+      Title: payload.title ?? '',
       Genre: payload.genre ,
       ReleaseDate: payload.releaseDate ?? '',
       ImageUrl: payload.imageUrl ?? '',

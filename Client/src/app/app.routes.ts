@@ -5,4 +5,6 @@ import { GamesOverview } from './Components/games/games-overview/games-overview'
 export const routes: Routes = [
     {path: '', component: Home},
     {path: 'Games', component: GamesOverview},
+
+    
 ];

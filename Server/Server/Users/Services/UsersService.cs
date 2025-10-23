@@ -48,7 +48,7 @@ namespace Server.Users.Services
             }
         }
 
-        public async Task<string?> Login(UserEntity user)
+        public async Task<UserDto?> Login(UserEntity user)
         {
             try
             {
@@ -60,7 +60,12 @@ namespace Server.Users.Services
                     return null;
                 }
                 var accepted = VerifyPassword(existingUser, user.PasswordHash);
-                return accepted ? GenerateToken(existingUser) : null;
+                var userDto = new UserDto
+                {
+                    token = accepted ? GenerateToken(existingUser) : null,
+                    user = new UserEntity() { Email = existingUser.Email, Username = existingUser.Username, Role = existingUser.Role}
+                };
+                return userDto;
             }
             catch (Exception ex)
             {

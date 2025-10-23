@@ -9,7 +9,27 @@ namespace Server.Users.Controllers
     [ApiController]
     public class UsersController(IUsersService _usersService) : ControllerBase
     {
-
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] UserEntity user)
+        {
+            if (user == null)
+            {
+                return BadRequest("User data is required.");
+            }
+            try
+            {
+                var token = await _usersService.Login(user);
+                if (token == null)
+                {
+                    return Unauthorized("Invalid username or password.");
+                }
+                return Ok(token);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error during login: {ex.Message}");
+            }
+        }
         [HttpPost("add")]
         public async Task<IActionResult> AddUser([FromBody] UserEntity userEntity)
         {
@@ -54,27 +74,7 @@ namespace Server.Users.Controllers
             }
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UserEntity user)
-        {
-            if (user == null)
-            {
-                return BadRequest("User data is required.");
-            }
-            try
-            {
-                var token = await _usersService.Login(user);
-                if (token == null)
-                {
-                    return Unauthorized("Invalid username or password.");
-                }
-                return Ok(token);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error during login: {ex.Message}");
-            }
-        }
+        
 
         [Authorize]
         [HttpDelete("delete")]

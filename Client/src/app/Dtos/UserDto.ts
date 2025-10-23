@@ -1,7 +1,6 @@
 export class UserDto {
-    id!: number;
+    id?: number;
     username?: string;
     email?: string;
-    password?: string;
-    token?: string;
+    passwordHash?: string;
 }

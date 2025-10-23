@@ -1,0 +1,36 @@
+<mat-dialog-content>
+  <div class="login-card">
+    <h2>Login</h2>
+
+    
+      <mat-form-field appearance="outline" >
+        <input matInput placeholder="Username or Email" [(ngModel)]="email" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Password" type="password" [type]="hide() ? 'password' : 'text'" [(ngModel)]="password"/>
+        <button
+      matIconButton
+      matSuffix
+      (click)="clickEvent($event)"
+      [attr.aria-label]="'Hide password'"
+      [attr.aria-pressed]="hide()"
+    >
+      <mat-icon svgIcon="{{hide() ? 'visibility_off' : 'visibility'}}"></mat-icon>
+    </button>
+    </mat-form-field>
+    @if (errorMessage !== '') {
+    <p style="color: red;">{{ errorMessage }}</p>
+    }
+      <a class="forgot-password" href="#">Forgot your password?</a>
+    
+
+    <p class="signup-text">Don’t have an account? <a href="#">Sign up</a></p>
+
+</div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button class="login-btn" (click)="Login()" style="background-color: brown;">Login</button>
+  <br>
+  <button mat-raised-button class="login-btn" (click)="close()" style="background-color: darkgray;">Cancel</button>
+</mat-dialog-actions>

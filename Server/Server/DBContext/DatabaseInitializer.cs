@@ -25,7 +25,7 @@ namespace Server.DBContext
                     context.Games.AddRange(games);
                     await context.SaveChangesAsync();
                     var users = conf.GetSection("Users").Get<List<UserEntity>>().First();
-                    usersService.AddUser(users);
+                    //usersService.AddUser(users);
                     
                 }
 

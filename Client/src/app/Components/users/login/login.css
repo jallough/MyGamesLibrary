@@ -1,0 +1,49 @@
+.login-card {
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  color: #000;
+}
+
+mat-form-field {
+  overflow: hidden;
+  width: 100%;
+}
+
+
+.login-btn {
+  width: 100%;
+  border-radius: 25px;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin: 1px;;
+}
+
+.forgot-password {
+  display: block;
+  margin-top: 0.75rem;
+  color: #000;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.divider {
+  margin: 2rem 0 1rem;
+  color: #fff;
+}
+
+
+.signup-text {
+  margin-top: 1.5rem;
+  color: #000;
+  font-size: 0.9rem;
+}
+
+.signup-text a {
+  color: #000;
+  font-weight: 500;
+  text-decoration: underline;
+}

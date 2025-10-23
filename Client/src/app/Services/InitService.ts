@@ -17,7 +17,10 @@ export class InitService {
             { name: 'games', url: '/icons/games.svg' },
             { name: 'add', url: '/icons/add.svg' },
             { name: 'edit', url: '/icons/edit.svg' },
-            { name: 'delete', url: '/icons/delete.svg' }
+            { name: 'delete', url: '/icons/delete.svg' },
+            { name: 'login', url: '/icons/login.svg' },
+            { name: 'visibility', url: '/icons/visibility.svg' },
+            { name: 'visibility_off', url: '/icons/visibility_off.svg' },
         ];
 
         for (const icon of icons) {

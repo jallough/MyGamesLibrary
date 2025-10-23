@@ -6,7 +6,7 @@ namespace Server.Users.Services
     {
         Task AddUser(UserEntity userEntity);
         Task UpdateUser(UserEntity userEntity);
-        Task<string?> Login(UserEntity userEntity);
+        Task<UserDto?> Login(UserEntity userEntity);
         Task DeleteUser(UserEntity user);
     }
 }

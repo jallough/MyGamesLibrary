@@ -39,7 +39,7 @@ public class AppDBContext: DbContext,IDataContext
             entity.HasKey(e => e.Id);
             entity.Property(e=>e.Id).ValueGeneratedOnAdd();
             entity.HasOne(e => e.User).WithMany().IsRequired().OnDelete(DeleteBehavior.Cascade);
-            entity.HasOne(e => e.Games).WithMany().IsRequired().OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.Game).WithMany().IsRequired().OnDelete(DeleteBehavior.Cascade);
             entity.Property(e => e.Status).IsRequired();
         }
         );

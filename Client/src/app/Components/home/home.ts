@@ -27,7 +27,7 @@ export class Home implements OnInit {
 
   loadGames(): void {
     this.loading.set(true);
-    this.gamesApi.getAll().subscribe(games => {
+    this.gamesApi.getAllFiltered(undefined,undefined,undefined,0,10).subscribe(games => {
       this.games$ = games;
       this.loading.set(false);
     });

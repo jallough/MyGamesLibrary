@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { map, Observable, tap } from "rxjs";
 import { HttpService } from "./HttpService";
 import { GamesDto } from "../Dtos/GamesDto";
 
@@ -11,7 +11,24 @@ export class HttpGameService {
     getAll(): Observable<GamesDto[]> {
         return this.http.get<GamesDto[]>('Games');
     }
-
+    getAllFiltered(orderBy?:string,filterByCategory?: string, search?:string,page?:number,batch?:number): Observable<GamesDto[]> {
+        return this.http.get<GamesDto[]>('Games/Filtered?orderBy=' + (orderBy ?? '') + '&filterByCategory=' + (filterByCategory ?? '') + '&search=' + (search ?? '') + '&page=' + (page ?? '') + '&batch=' + (batch ?? ''));
+    }
+    getAllFilteredByUser(orderBy?:string,filterByCategory?: string, filterByStatus?:string, search?:string,page?:number,batch?:number,userId?:number): Observable<GamesDto[]> {
+        return this.http.get<any[]>('Games/user/Filtered?orderBy=' + (orderBy ?? '') + '&filterByCategory=' + (filterByCategory ?? '') + '&filterByStatus=' + (filterByStatus ?? '') + '&search=' + (search ?? '') + '&page=' + (page ?? '') + '&batch=' + (batch ?? '') + '&userId=' + (userId))
+        .pipe(
+            map(relations =>
+                relations.map(r => ({
+                id: r.game.id,
+                title: r.game.title,
+                genre: r.game.genre,
+                releaseDate: r.game.releaseDate,
+                imageUrl: r.game.imageUrl,
+                status: r.status
+                }) as GamesDto)
+            )
+        );
+    }
     getAvailableGames(): Observable<GamesDto[]> {
         return this.http.get<GamesDto[]>('Games/available');
     }

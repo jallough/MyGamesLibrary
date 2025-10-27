@@ -7,7 +7,7 @@ import { GamesDto, GameGenre, GameStatus } from '../../../Dtos/GamesDto';
 import { MatSelectModule } from '@angular/material/select';
 import { HttpGameService } from '../../../Services/HttpGameService';
 import { MatInput } from '@angular/material/input';
-import { FormControl, StatusChangeEvent } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 @Component({
@@ -24,10 +24,15 @@ export class GamesListComponent{
   @Output() delete = new EventEmitter<number>();
   readonly GameGenre = GameGenre;
   readonly GameStatus = GameStatus;
+  private pageSize: number = 10;
+  private currentPage: number = 0;
   orderByOptions = [
-    { value: 'publishDate', label: 'Publish Date' },
-    { value: 'title', label: 'Title' },
-    { value: 'genre', label: 'Genre' }
+    { value: 'publishDateLH', label: 'Publish Date Low to High' },
+    { value: 'publishDateHL', label: 'Publish Date High to Low' },
+    { value: 'titleA', label: 'Title A to Z' },
+    { value: 'titleD', label: 'Title Z to A' },
+    { value: 'genreA', label: 'Genre A to Z' },
+    { value: 'genreD', label: 'Genre Z to A' }
   ];
   filterByOptions = [
     { value: 'all', label: 'All' },
@@ -60,54 +65,19 @@ export class GamesListComponent{
         distinctUntilChanged()         // Only emit if value changed
       )
     .subscribe(value => {
-      this.gamesApi.getAll().subscribe(games => {
-      const searchTextLower = value!.toLowerCase();
-      this.games = games.filter(g => g.title.toLowerCase().includes(searchTextLower));
-    });
+      gamesApi.getAllFiltered(undefined, undefined, value!, this.currentPage, this.pageSize).subscribe(games => { this.games = games });
     });
   }
 
   public onOrderByChange(selectedValue: string) {
-    this.games.sort((a, b) => {
-      if (selectedValue === 'title') {
-        return a.title.localeCompare(b.title);
-      } else if (selectedValue === 'genre') {
-        return a.genre - b.genre;
-      } else {
-        return  new Date(b.releaseDate).getTime()-new Date(a.releaseDate).getTime();
-      }
-  });
+    this.gamesApi.getAllFiltered(selectedValue,undefined,undefined,this.currentPage,this.pageSize).subscribe(games => {
+      this.games = games;
+    });
   }
 
   public onFilterByChange(selectedValue: string) {
-    this.gamesApi.getAll().subscribe(games => {
-      let filteredGames = games;
-      if (selectedValue !== 'all') {
-        const statusMap: any = {
-          completed: GameStatus.Completed,
-          playing: GameStatus.Playing,
-          onHold: GameStatus.OnHold,
-          dropped: GameStatus.Dropped,
-          planToPlay: GameStatus.PlanToPlay
-        };
-        filteredGames = filteredGames.filter(g => g.status === statusMap[selectedValue]);
-      }
-      if (selectedValue !== 'all') {
-        const categoryMap: any = {
-          action: GameGenre.Action,
-          adventure: GameGenre.Adventure,
-          rpg: GameGenre.RPG,
-          strategy: GameGenre.Strategy, 
-          simulation: GameGenre.Simulation,
-          sports: GameGenre.Sports,
-          puzzle: GameGenre.Puzzle,
-          horror: GameGenre.Horror,
-          mmo: GameGenre.MMO,
-          indie: GameGenre.Indie
-        };
-        filteredGames = filteredGames.filter(g => g.genre === categoryMap[selectedValue]);
-      }
-      this.games = filteredGames;
+    this.gamesApi.getAllFiltered(undefined, selectedValue,undefined,this.currentPage,this.pageSize).subscribe(games => {
+      this.games = games;
     });
   }
 

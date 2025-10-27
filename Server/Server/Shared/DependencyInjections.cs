@@ -11,11 +11,12 @@ namespace Server.Shared
         public static IServiceCollection InjectDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<DatabaseInitializer>();
-            services.AddScoped<IDataContext, AppDBContext>();
+            services.AddScoped<IDataContext>(provider => provider.GetRequiredService<AppDBContext>());
             services.AddScoped<IGamesServices, GamesServices>();
             services.AddScoped<IGamesRepository, GamesRepository>();
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IUsersRepository, UsersRepository>();
+            services.AddSingleton<ICachingService, CachingService>();
             return services;
         }
     }

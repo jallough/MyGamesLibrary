@@ -25,10 +25,10 @@ public class GamesController : ControllerBase
         var games = await _gamesServices.GetAllAsync();
         return Ok(games);
     }
-    [HttpGet("Load")]
-    public async Task<IActionResult> GetGamesPaged([FromQuery] int page, [FromQuery] int number)
+    [HttpGet("Filtered")]
+    public async Task<IActionResult> GetGamesPaged([FromQuery] string? orderBy, [FromQuery] string? filterByCategory, [FromQuery] string? search ,[FromQuery] int page, [FromQuery] int batch)
     {
-        var games = await _gamesServices.GetAllAsync(page, number);
+        var games = await _gamesServices.GetAllAsync(orderBy, filterByCategory, search, page, batch);
         return Ok(games);
     }
     [HttpGet("user/{id}")]
@@ -38,11 +38,13 @@ public class GamesController : ControllerBase
         var games = await _gamesServices.GetAllAsync();
         return Ok(games);
     }
-    [HttpGet("user/Load")]
-    public async Task<IActionResult> GetGamesPagedByUser([FromQuery] int page, [FromQuery] int number)
+
+    [Authorize]
+    [HttpGet("user/Filtered")]
+    public async Task<IActionResult> GetGamesPagedByUser([FromQuery] string? orderBy, [FromQuery] string? filterByCategory, [FromQuery] string filterByStatus ,[FromQuery] string? search, [FromQuery] int page, [FromQuery] int number, [FromQuery] long userId)
     {
         //TODO: Filter by user
-        var games = await _gamesServices.GetAllAsync(page, number);
+        var games = await _gamesServices.GetAllByUserAsync(orderBy,filterByCategory,filterByStatus,search, page, number,userId);
         return Ok(games);
     }
     [Authorize(Roles = "Admin")]

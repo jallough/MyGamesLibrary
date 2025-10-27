@@ -5,11 +5,11 @@ namespace Server.Games.Repositories
     public interface IGamesRepository
     {
         Task<List<GamesEntity>> GetAllAsync();
-        Task<List<GamesEntity>> GetAllAsync(int page, int number);
+        Task<List<GamesEntity>> GetAllAsync(string orderBy, string filterByCategory, string search, int page, int number);
         Task<GamesEntity?> GetByIdAsync(long id);
         Task AddAsync(GamesEntity game);
         Task UpdateAsync(GamesEntity game);
         Task DeleteAsync(long id);
-
+        Task<List<GamesUserRelationEntity>> GetAllByUserAsync(string orderBy, string filterByCategory, string filterByStatus, string search, int page, int number, long userId);
     }
 }

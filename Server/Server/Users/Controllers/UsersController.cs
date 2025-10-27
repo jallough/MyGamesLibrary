@@ -23,7 +23,7 @@ namespace Server.Users.Controllers
                 {
                     return Unauthorized("Invalid username or password.");
                 }
-                return Ok(token);
+                return Ok(new { token });
             }
             catch (Exception ex)
             {

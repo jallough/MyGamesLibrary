@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { GameDialog } from '../games-dialog/game-dialog';
+import { HttpUserService } from '../../../Services/HttpUserService';
 
 @Component({
   selector: 'app-games-overview',
@@ -20,7 +21,7 @@ export class GamesOverview implements OnInit{
   games: GamesDto[] = [];
   loading = signal(false);
 
-  constructor(private readonly gamesApi: HttpGameService, private readonly dialog: MatDialog) {}
+  constructor(private readonly gamesApi: HttpGameService, private readonly dialog: MatDialog,private readonly userService:HttpUserService) {}
 
   ngOnInit(): void {
       this.loadGames();
@@ -28,8 +29,12 @@ export class GamesOverview implements OnInit{
   
     async loadGames() {
       this.loading.set(true);
-      this.gamesApi.getAll().subscribe(g=> {this.games = g; this.loading.set(false);} );
       
+      if(this.userService.currentUserSig!=null){
+        this.gamesApi.getAllFilteredByUser(undefined,undefined,undefined,undefined,0,10,this.userService.currentUserSig()?.id).subscribe(g=> {this.games = g; this.loading.set(false);} );
+      }else{
+        this.gamesApi.getAllFiltered(undefined,undefined,undefined,0,10).subscribe(g=> {this.games = g; this.loading.set(false);} );
+      }
     }
   
     openAdd() {

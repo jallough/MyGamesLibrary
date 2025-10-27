@@ -19,6 +19,7 @@ export class InitService {
             { name: 'edit', url: '/icons/edit.svg' },
             { name: 'delete', url: '/icons/delete.svg' },
             { name: 'login', url: '/icons/login.svg' },
+            { name: 'logout', url: '/icons/logout.svg' },
             { name: 'visibility', url: '/icons/visibility.svg' },
             { name: 'visibility_off', url: '/icons/visibility_off.svg' },
         ];

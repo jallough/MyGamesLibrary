@@ -8,20 +8,25 @@
     <mat-divider/>
     <mat-toolbar style="background-color: transparent;">
       <mat-toolbar-row >
-        <a matButton href="/" class="a">
+        <a matButton [routerLink]="['/']" class="a">
           <mat-icon svgIcon="dashboard"></mat-icon>
           Dashboard</a>
         </mat-toolbar-row>
+        @if (currentUser()){
+          <mat-toolbar-row>
+            <a matButton [routerLink]="['/Games']" class="a">
+              <mat-icon svgIcon="games"></mat-icon>
+              My Games</a>
+          </mat-toolbar-row>
+        }
+        @if (currentUser()?.role === 'Admin'){
         <mat-toolbar-row>
-        <a matButton href="/Games" class="a">
-          <mat-icon svgIcon="games"></mat-icon>
-          My Games</a>
-      </mat-toolbar-row>
-      <mat-toolbar-row>
-        <a matButton href="/Games" class="a">
-          <mat-icon svgIcon="games"></mat-icon>
-          Library</a>
-      </mat-toolbar-row>
+          <a matButton [routerLink]="['/Games']" class="a">
+            <mat-icon svgIcon="games"></mat-icon>
+            Library</a>
+        </mat-toolbar-row>
+        }
+        
     </mat-toolbar>
   </mat-drawer>
  <mat-drawer-content>
@@ -30,9 +35,24 @@
         <mat-icon svgIcon="games"></mat-icon>
       </button>
       <span style="margin-left: 10px;">Games Library</span>
-      <button mat-icon-button (click)="login()" matTooltip="Login" style="margin-left:auto;">
+      @if (currentUser()){
+        <span style="margin-left:auto;display: flex;">
+        <span style="vertical-align: super;">
+        <div style="font-size: smaller;">{{currentUser()?.username}}</div>
+        <div style="font-size: smaller;">{{currentUser()?.email}}</div>
+        </span>
+        <span style="align-content: space-evenly;">
+        <button mat-icon-button (click)="logout()" matTooltip="Logout" >
+        <mat-icon svgIcon="logout"></mat-icon>
+        </button></span>
+        </span>
+      }
+      @else
+      {
+        <button mat-icon-button (click)="login()" matTooltip="Login" style="margin-left:auto;">
         <mat-icon svgIcon="login"></mat-icon>
         </button>
+      }
   </mat-toolbar>
   <router-outlet />
  </mat-drawer-content>

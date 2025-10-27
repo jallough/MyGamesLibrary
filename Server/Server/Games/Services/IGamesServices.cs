@@ -4,7 +4,9 @@ namespace Server.Games.Services
 {
     public interface IGamesServices
     {
-        Task<List<GamesEntity>> GetAllAsync(int page, int number);
+        Task<List<GamesEntity>> GetAllAsync(string orderBy, string filterByCategory, string search, int page, int number);
+        Task<List<GamesUserRelationEntity>> GetAllByUserAsync(string orderBy, string filterByCategory, string filterByStatus, string search, int page, int number, long userId);
+
         Task<GamesEntity?> GetByIdAsync(long id);
         Task AddAsync(GamesEntity game);
         Task UpdateAsync(GamesEntity game);

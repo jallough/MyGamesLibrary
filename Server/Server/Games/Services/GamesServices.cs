@@ -28,7 +28,7 @@ namespace Server.Games.Services
 
                 if (!string.IsNullOrWhiteSpace(filterByCategory))
                 {
-                    switch (filterByCategory.ToLower())
+                    switch (filterByCategory)
                     {
                         case "action":
                             cachedGames = cachedGames.Where(g => g.Genre == Genre.Action).ToList();
@@ -68,7 +68,7 @@ namespace Server.Games.Services
                 {
 
 
-                    switch (orderBy.ToLower())
+                    switch (orderBy)
                     {
                         case "titleA":
                             cachedGames = cachedGames.OrderBy(g => g.Title).ToList();
@@ -265,6 +265,50 @@ namespace Server.Games.Services
         public async Task<List<GamesUserRelationEntity>> GetAllByUserAsync(string orderBy, string filterByCategory, string filterByStatus, string search, int page, int number, long userId)
         {
             return await _gamesRepository.GetAllByUserAsync(orderBy, filterByCategory, filterByStatus, search, page, number, userId);
+        }
+
+        public async Task AddGameByUserAsync(GamesUserRelationEntity game)
+        {
+            try
+            {
+                await _gamesRepository.AddRelation(_mapper.Map<GamesUserRelationEntity>(game));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting game with ID: {GameId}", game);
+                throw;
+            }
+        }
+
+        public async Task UpdateGameByUserAsync(GamesUserRelationEntity game)
+        {
+            try
+            {
+                var relation = await _gamesRepository.GetRelation(game);
+                if (relation == null)
+                {
+                    throw new ArgumentNullException(nameof(game));
+                }
+                await _gamesRepository.UpdateRelation(_mapper.Map(game,relation));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting game with ID: {GameId}", game);
+                throw;
+            }
+        }
+
+        public async Task DeleteGameByUserAsync(long id)
+        {
+            try
+            {
+                await _gamesRepository.DeleteRelation(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting game with ID: {GameId}", id);
+                throw;
+            }
         }
     }
 }

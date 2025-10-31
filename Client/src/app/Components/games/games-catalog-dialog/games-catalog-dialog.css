@@ -1,0 +1,17 @@
+mat-form-field { display: block; margin-bottom: 8px; }
+
+.mat-mdc-dialog-surface {
+    padding: 15px !important;
+}
+.cards { display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:16px; padding: 16px; }
+.game-card img { max-height: 140px; object-fit: cover; }
+.toolbar { display:flex; align-items:center; padding: 12px 16px 0px; }
+
+.clickable {
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.clickable:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}

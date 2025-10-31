@@ -5,7 +5,8 @@ namespace Server.Games.Entities
 {
     public class GamesUserRelationEntity:BaseEntity
     {
-        public UserEntity User { get; set; } = null!;
+        public long UserId { get; set; } 
+        public long GameId { get; set; }
         public GamesEntity Game { get; set; } = null!;
         public Status Status { get; set; }
     }

@@ -52,7 +52,7 @@ namespace Server.Migrations
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     UserId = table.Column<long>(type: "INTEGER", nullable: false),
-                    GamesId = table.Column<long>(type: "INTEGER", nullable: false),
+                    GameId = table.Column<long>(type: "INTEGER", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
@@ -60,8 +60,8 @@ namespace Server.Migrations
                 {
                     table.PrimaryKey("PK_GamesUserRelations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_GamesUserRelations_Games_GamesId",
-                        column: x => x.GamesId,
+                        name: "FK_GamesUserRelations_Games_GameId",
+                        column: x => x.GameId,
                         principalTable: "Games",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -80,9 +80,9 @@ namespace Server.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_GamesUserRelations_GamesId",
+                name: "IX_GamesUserRelations_GameId",
                 table: "GamesUserRelations",
-                column: "GamesId");
+                column: "GameId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GamesUserRelations_UserId",

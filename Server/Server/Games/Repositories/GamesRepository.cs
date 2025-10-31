@@ -104,9 +104,36 @@ namespace Server.Games.Repositories
         public async Task<List<GamesUserRelationEntity>> GetAllByUserAsync(string orderBy, string filterByCategory, string filterByStatus, string search, int page, int number, long userId)
         {
             return await _context.GamesUserRelations
-                .Where(rel => rel.User.Id == userId)
-                .Select(rel => new GamesUserRelationEntity { Game = rel.Game,Status = rel.Status })
+                .Where(rel => rel.UserId == userId)
+                .Include(rel=>rel.Game)
                 .ToListAsync();
+        }
+
+        public async Task AddRelation(GamesUserRelationEntity game)
+        {
+            _context.GamesUserRelations.Add(game);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateRelation(GamesUserRelationEntity game)
+        {
+            _context.GamesUserRelations.Update(game);
+            await _context.SaveChangesAsync();
+        }
+        public async Task DeleteRelation(long id)
+        {
+            var relation = await _context.GamesUserRelations.FindAsync(id);
+            if (relation == null)
+            {
+                throw new KeyNotFoundException();
+            }
+            _context.GamesUserRelations.Remove(relation);
+            await _context.SaveChangesAsync();
+        }
+
+        public Task<GamesUserRelationEntity> GetRelation(GamesUserRelationEntity game)
+        {
+            return _context.GamesUserRelations.Where(g => g.GameId == game.GameId && g.UserId == game.UserId).FirstAsync();
         }
     }
 }

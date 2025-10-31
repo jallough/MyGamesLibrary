@@ -1,0 +1,53 @@
+<div class="toolbar1">
+		<h2>My Games</h2>
+		<button mat-raised-button color="primary" (click)="openAdd()"><mat-icon svgIcon="add"></mat-icon >Add</button>
+	</div>
+<div class="toolbar">
+		<mat-form-field >
+      <mat-label>Order By</mat-label>
+      <mat-select value="publishDateHL" (selectionChange)="onOrderByChange($event.value)">
+        @for (opt of orderByOptions; track opt) {
+          <mat-option [value]="opt.value">{{opt.label}}</mat-option>
+        }
+  </mat-select>
+</mat-form-field>
+<mat-form-field style="padding: 0px 10px;">
+      <mat-label>Filter By Categories</mat-label>
+      <mat-select value="all" (selectionChange)="onFilterByChange($event.value)">
+        @for (opt of filterByCategoryOptions; track opt) {
+          <mat-option [value]="opt.value">{{opt.label}}</mat-option>
+        }
+  </mat-select>
+</mat-form-field>
+<mat-form-field>
+      <mat-label >Filter By Status</mat-label>
+      <mat-select value="all" (selectionChange)="onFilterByChange($event.value)">
+        @for (opt of filterByOptions; track opt) {
+          <mat-option [value]="opt.value">{{opt.label}}</mat-option>
+        }
+  </mat-select>
+</mat-form-field>
+<mat-form-field style="padding: 0px 10px;">
+  <mat-label for="Search">Search</mat-label>
+  <input matInput id="Search" type="text" placeholder="Search" [formControl]="searchControl"/>
+</mat-form-field>
+</div>
+<div *ngIf="!loading()" class="cards">
+@for (g of userGames; track g.id) {
+  <mat-card  class="game-card">
+    <img mat-card-image [src]="g.game.imageUrl" alt="{{g.game.title}}" />
+    <mat-card-header>
+      <mat-card-title>{{ g.game.title }}</mat-card-title>
+      <mat-card-subtitle>Genre: {{ GameGenre[g.game.genre] }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>Release: {{ g.game.releaseDate | date:'dd.MM.yyyy'}}</p>
+      <p>Status: {{ GameStatus[g.status!] }}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button color="primary" (click)="openEdit(g!)"><mat-icon svgIcon="edit"></mat-icon>Edit</button>
+      <button mat-button color="warn" (click)="deleteRelation(g.id!)"><mat-icon svgIcon="delete"></mat-icon> Delete</button>
+    </mat-card-actions>
+  </mat-card>
+}
+</div>

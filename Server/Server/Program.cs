@@ -42,7 +42,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("http://localhost:4200")
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 var app = builder.Build();
@@ -65,7 +66,6 @@ app.UseHttpsRedirection();
 // Enable CORS for the configured policy
 app.UseCors("AllowAngularDev");
 
-app.UseAuthorization();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

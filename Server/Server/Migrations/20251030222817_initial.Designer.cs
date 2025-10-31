@@ -11,7 +11,7 @@ using Server.DBContext;
 namespace Server.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20251022173103_initial")]
+    [Migration("20251030222817_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -61,7 +61,7 @@ namespace Server.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("GamesId")
+                    b.Property<long>("GameId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Status")
@@ -72,7 +72,7 @@ namespace Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GamesId");
+                    b.HasIndex("GameId");
 
                     b.HasIndex("UserId");
 
@@ -118,21 +118,19 @@ namespace Server.Migrations
 
             modelBuilder.Entity("Server.Games.Entities.GamesUserRelationEntity", b =>
                 {
-                    b.HasOne("Server.Games.Entities.GamesEntity", "Games")
+                    b.HasOne("Server.Games.Entities.GamesEntity", "Game")
                         .WithMany()
-                        .HasForeignKey("GamesId")
+                        .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Server.Users.Entities.UserEntity", "User")
+                    b.HasOne("Server.Users.Entities.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Games");
-
-                    b.Navigation("User");
+                    b.Navigation("Game");
                 });
 #pragma warning restore 612, 618
         }

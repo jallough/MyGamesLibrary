@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>{{ mode === 'add' ? 'Add Game' : 'Edit Game' }}</h2>
+<mat-dialog-content class="dialog-content">
+  
+<div class="cards">
+  <mat-card class="game-card">
+    <img mat-card-image [src]="data.game?.game?.imageUrl" alt="{{data.game?.game?.title}}" />
+    <mat-card-header>
+      <mat-card-title>{{ data.game?.game?.title }}</mat-card-title>
+      <mat-card-subtitle>Genre: {{ GameGenre[data.game?.game?.genre!] }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>Release: {{ data.game?.game?.releaseDate | date:'dd.MM.yyyy'}}</p>
+    </mat-card-content>
+  </mat-card>
+  <br>
+  <form [formGroup]="form">
+    <mat-form-field appearance="fill" class="full">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option *ngFor="let s of statusOptions" [value]="s.value">{{ s.label }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    </form>
+</div>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button color="primary" (click)="submit()">{{ mode === 'add' ? 'Add' : 'Save' }}</button>
+  <button mat-button (click)="close()">Cancel</button>
+</mat-dialog-actions>

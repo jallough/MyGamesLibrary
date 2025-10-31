@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { GamesListComponent } from '../games-list/games-list';
 import { HttpGameService } from '../../../Services/HttpGameService';
 import { GamesDto } from '../../../Dtos/GamesDto';
-import { firstValueFrom, Observable } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
@@ -22,19 +21,14 @@ export class GamesOverview implements OnInit{
   loading = signal(false);
 
   constructor(private readonly gamesApi: HttpGameService, private readonly dialog: MatDialog,private readonly userService:HttpUserService) {}
-
   ngOnInit(): void {
       this.loadGames();
     }
-  
-    async loadGames() {
+    
+    loadGames() {
       this.loading.set(true);
+      this.gamesApi.getAllFiltered(undefined,undefined,undefined,0,10).subscribe(g=> {this.games = g; this.loading.set(false);} );
       
-      if(this.userService.currentUserSig!=null){
-        this.gamesApi.getAllFilteredByUser(undefined,undefined,undefined,undefined,0,10,this.userService.currentUserSig()?.id).subscribe(g=> {this.games = g; this.loading.set(false);} );
-      }else{
-        this.gamesApi.getAllFiltered(undefined,undefined,undefined,0,10).subscribe(g=> {this.games = g; this.loading.set(false);} );
-      }
     }
   
     openAdd() {

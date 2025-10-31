@@ -1,10 +1,8 @@
 import { Component, Inject, Injectable } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA,
-  MatDialogActions,
-  MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle, } from '@angular/material/dialog';
+  MatDialogModule,
+  MatDialogRef } from '@angular/material/dialog';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -15,7 +13,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { HttpGameService } from '../../../Services/HttpGameService';
 import { GamesDto, GameGenre, GameStatus } from '../../../Dtos/GamesDto';
-import { Observable, startWith, map } from 'rxjs';
 import {provideNativeDateAdapter} from '@angular/material/core';
 
 @Component({
@@ -23,9 +20,7 @@ import {provideNativeDateAdapter} from '@angular/material/core';
   standalone: true,
   providers:[ provideNativeDateAdapter() ],
   imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatAutocompleteModule, MatDatepickerModule, MatNativeDateModule, 
-    MatSelectModule,
-    MatDialogTitle, MatDialogContent, MatDialogActions
-  ],
+    MatSelectModule, MatDialogModule],
   templateUrl: './game-dialog.html',
   styleUrl: './game-dialog.css'
 })
@@ -50,12 +45,10 @@ export class GameDialog {
     @Inject(MAT_DIALOG_DATA) public data: { mode: 'add' | 'edit'; game?: GamesDto }
   ) {
     this.form = this.fb.group({
-      name: ['', Validators.required],
-      // genre/status will be numeric enum values
+      title: ['', Validators.required],
       genre: [null],
       releaseDate: [''],
-      imageUrl: [''],
-      status: [null]
+      imageUrl: ['']
     });
 
     if (data?.mode === 'edit' && data.game) {
@@ -105,9 +98,8 @@ export class GameDialog {
       Id : this.data.game?.id ?? 0,
       Title: payload.title ?? '',
       Genre: payload.genre ,
-      ReleaseDate: payload.releaseDate ?? '',
-      ImageUrl: payload.imageUrl ?? '',
-      Status: payload.status
+      ReleaseDate: payload.releaseDate?.split('T')[0] ?? '',
+      ImageUrl: payload.imageUrl ?? ''
     };
 
     // Log the exact JSON string that will be sent so you can inspect it in Network tab
@@ -118,11 +110,6 @@ export class GameDialog {
     } else if (this.mode === 'edit' && this.data.game) {
       this.api.update(this.data.game.id, finalPayload).subscribe({ next: res => this.dialogRef.close(true), error: handleError });
     }
-  }
-
-  private _filterOptions(value: string, options: string[]) {
-    const filterValue = (value || '').toLowerCase();
-    return options.filter(opt => opt.toLowerCase().includes(filterValue));
   }
 
   close() {

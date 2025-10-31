@@ -41,11 +41,35 @@ public class GamesController : ControllerBase
 
     [Authorize]
     [HttpGet("user/Filtered")]
-    public async Task<IActionResult> GetGamesPagedByUser([FromQuery] string? orderBy, [FromQuery] string? filterByCategory, [FromQuery] string filterByStatus ,[FromQuery] string? search, [FromQuery] int page, [FromQuery] int number, [FromQuery] long userId)
+    public async Task<IActionResult> GetGamesPagedByUser([FromQuery] string? orderBy, [FromQuery] string? filterByCategory, [FromQuery] string? filterByStatus ,[FromQuery] string? search, [FromQuery] int page, [FromQuery] int number, [FromQuery] long userId)
     {
         //TODO: Filter by user
         var games = await _gamesServices.GetAllByUserAsync(orderBy,filterByCategory,filterByStatus,search, page, number,userId);
         return Ok(games);
+    }
+    [Authorize]
+    [HttpPost("AddRelation")]
+    public async Task<IActionResult> AddGamesByUser([FromBody] GamesUserRelationEntity game)
+    {
+        //TODO: Filter by user
+        await _gamesServices.AddGameByUserAsync(game);
+        return Ok();
+    }
+    [Authorize]
+    [HttpPut("UpdateRelation")]
+    public async Task<IActionResult> UpdateGamesByUser([FromBody] GamesUserRelationEntity game)
+    {
+        //TODO: Filter by user
+        await _gamesServices.UpdateGameByUserAsync(game);
+        return Ok();
+    }
+    [Authorize]
+    [HttpDelete("DeleteRelation/{id}")]
+    public async Task<IActionResult> DeleteGamesByUser([FromRoute] long id)
+    {
+        //TODO: Filter by user
+        await _gamesServices.DeleteGameByUserAsync(id);
+        return Ok();
     }
     [Authorize(Roles = "Admin")]
     // GET: api/games/5

@@ -38,8 +38,8 @@ public class AppDBContext: DbContext,IDataContext
         modelBuilder.Entity<GamesUserRelationEntity>(entity => {
             entity.HasKey(e => e.Id);
             entity.Property(e=>e.Id).ValueGeneratedOnAdd();
-            entity.HasOne(e => e.User).WithMany().IsRequired().OnDelete(DeleteBehavior.Cascade);
-            entity.HasOne(e => e.Game).WithMany().IsRequired().OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne<UserEntity>().WithMany().HasForeignKey(e=>e.UserId).IsRequired().OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.Game).WithMany().HasForeignKey(e => e.GameId).IsRequired().OnDelete(DeleteBehavior.Cascade);
             entity.Property(e => e.Status).IsRequired();
         }
         );

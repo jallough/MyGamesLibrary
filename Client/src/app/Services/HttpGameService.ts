@@ -2,9 +2,11 @@ import { Injectable } from "@angular/core";
 import { map, Observable, tap } from "rxjs";
 import { HttpService } from "./HttpService";
 import { GamesDto } from "../Dtos/GamesDto";
+import { UserGameRelationDto } from "../Dtos/UserGameRelationDto";
 
 @Injectable({ providedIn: 'root' })
 export class HttpGameService {
+    
     constructor(private readonly http: HttpService) {}
 
     // GET api/games
@@ -14,20 +16,8 @@ export class HttpGameService {
     getAllFiltered(orderBy?:string,filterByCategory?: string, search?:string,page?:number,batch?:number): Observable<GamesDto[]> {
         return this.http.get<GamesDto[]>('Games/Filtered?orderBy=' + (orderBy ?? '') + '&filterByCategory=' + (filterByCategory ?? '') + '&search=' + (search ?? '') + '&page=' + (page ?? '') + '&batch=' + (batch ?? ''));
     }
-    getAllFilteredByUser(orderBy?:string,filterByCategory?: string, filterByStatus?:string, search?:string,page?:number,batch?:number,userId?:number): Observable<GamesDto[]> {
-        return this.http.get<any[]>('Games/user/Filtered?orderBy=' + (orderBy ?? '') + '&filterByCategory=' + (filterByCategory ?? '') + '&filterByStatus=' + (filterByStatus ?? '') + '&search=' + (search ?? '') + '&page=' + (page ?? '') + '&batch=' + (batch ?? '') + '&userId=' + (userId))
-        .pipe(
-            map(relations =>
-                relations.map(r => ({
-                id: r.game.id,
-                title: r.game.title,
-                genre: r.game.genre,
-                releaseDate: r.game.releaseDate,
-                imageUrl: r.game.imageUrl,
-                status: r.status
-                }) as GamesDto)
-            )
-        );
+    getAllFilteredByUser(orderBy?:string,filterByCategory?: string, filterByStatus?:string, search?:string,page?:number,batch?:number,userId?:number): Observable<UserGameRelationDto[]> {
+        return this.http.get<any[]>('Games/user/Filtered?orderBy=' + (orderBy ?? '') + '&filterByCategory=' + (filterByCategory ?? '') + '&filterByStatus=' + (filterByStatus ?? '') + '&search=' + (search ?? '') + '&page=' + (page ?? '') + '&batch=' + (batch ?? '') + '&userId=' + (userId));
     }
     getAvailableGames(): Observable<GamesDto[]> {
         return this.http.get<GamesDto[]>('Games/available');
@@ -58,5 +48,17 @@ export class HttpGameService {
     // DELETE api/games/{id}
     delete(id: number): Observable<void> {
         return this.http.delete<void>(`Games/${id}`);
+    }
+
+    AddGameRelation(userGame: UserGameRelationDto):Observable<UserGameRelationDto> {
+        return this.http.post<UserGameRelationDto>('Games/AddRelation',userGame);
+    }
+    
+    UpdateGameRelation(userGame: UserGameRelationDto):Observable<UserGameRelationDto> {
+        return this.http.put<UserGameRelationDto>('Games/UpdateRelation',userGame);
+    }
+    DeleteGameRelation(id: number):Observable<void> {
+
+        return this.http.delete<void>(`Games/DeleteRelation/${id}`);
     }
 }

@@ -11,22 +11,21 @@
         <a matButton [routerLink]="['/']" class="a">
           <mat-icon svgIcon="dashboard"></mat-icon>
           Dashboard</a>
-        </mat-toolbar-row>
-        @if (currentUser()){
-          <mat-toolbar-row>
-            <a matButton [routerLink]="['/Games']" class="a">
-              <mat-icon svgIcon="games"></mat-icon>
-              My Games</a>
-          </mat-toolbar-row>
-        }
-        @if (currentUser()?.role === 'Admin'){
+      </mat-toolbar-row>
+      @if (currentUser()){
         <mat-toolbar-row>
           <a matButton [routerLink]="['/Games']" class="a">
             <mat-icon svgIcon="games"></mat-icon>
-            Library</a>
+            My Games</a>
         </mat-toolbar-row>
-        }
-        
+      }
+      @if (currentUser()?.role === 'Admin'){
+      <mat-toolbar-row>
+        <a matButton [routerLink]="['/GamesConfig']" class="a">
+          <mat-icon svgIcon="extension"></mat-icon>
+          Library</a>
+      </mat-toolbar-row>
+      } 
     </mat-toolbar>
   </mat-drawer>
  <mat-drawer-content>

@@ -26,6 +26,9 @@ export class GamesListComponent{
   readonly GameStatus = GameStatus;
   private pageSize: number = 10;
   private currentPage: number = 0;
+  searchValue='';
+  orderValue='';
+  categorieValue='';
   orderByOptions = [
     { value: 'publishDateLH', label: 'Publish Date Low to High' },
     { value: 'publishDateHL', label: 'Publish Date High to Low' },
@@ -65,20 +68,23 @@ export class GamesListComponent{
         distinctUntilChanged()         // Only emit if value changed
       )
     .subscribe(value => {
-      gamesApi.getAllFiltered(undefined, undefined, value!, this.currentPage, this.pageSize).subscribe(games => { this.games = games });
+      this.searchValue = value!;
+      this.LoadGames();
     });
   }
-
-  public onOrderByChange(selectedValue: string) {
-    this.gamesApi.getAllFiltered(selectedValue,undefined,undefined,this.currentPage,this.pageSize).subscribe(games => {
-      this.games = games;
+  LoadGames(){
+    this.gamesApi.getAllFiltered(this.orderValue,this.categorieValue,this.searchValue,this.currentPage,this.pageSize).subscribe(games => { 
+      this.games=games;
     });
+  }
+  public onOrderByChange(selectedValue: string) {
+    this.orderValue = selectedValue;
+    this.LoadGames();
   }
 
   public onFilterByChange(selectedValue: string) {
-    this.gamesApi.getAllFiltered(undefined, selectedValue,undefined,this.currentPage,this.pageSize).subscribe(games => {
-      this.games = games;
-    });
+    this.categorieValue = selectedValue;
+    this.LoadGames();
   }
 
 }

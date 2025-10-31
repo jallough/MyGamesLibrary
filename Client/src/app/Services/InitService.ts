@@ -22,6 +22,7 @@ export class InitService {
             { name: 'logout', url: '/icons/logout.svg' },
             { name: 'visibility', url: '/icons/visibility.svg' },
             { name: 'visibility_off', url: '/icons/visibility_off.svg' },
+            { name: 'extension', url:'/icons/extension.svg' }
         ];
 
         for (const icon of icons) {

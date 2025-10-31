@@ -19,6 +19,7 @@ namespace Server.Shared
                 cfg.CreateMap<UserEntity, UserEntity>()
                 .ForMember(u=>u.CreatedAt, opt => opt.Ignore());
                 cfg.CreateMap<GamesUserRelationEntity, GamesUserRelationEntity>()
+                .ForMember(gur => gur.Game, opt => opt.Ignore())
                 .ForMember(gur=>gur.CreatedAt, opt=>opt.Ignore());
 
             });

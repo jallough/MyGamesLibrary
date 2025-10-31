@@ -11,5 +11,9 @@ namespace Server.Games.Repositories
         Task UpdateAsync(GamesEntity game);
         Task DeleteAsync(long id);
         Task<List<GamesUserRelationEntity>> GetAllByUserAsync(string orderBy, string filterByCategory, string filterByStatus, string search, int page, int number, long userId);
+        Task AddRelation(GamesUserRelationEntity game);
+        Task UpdateRelation(GamesUserRelationEntity game);
+        Task DeleteRelation(long id);
+        Task<GamesUserRelationEntity> GetRelation(GamesUserRelationEntity game);
     }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { MatDialogRef, MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { HttpGameService } from '../../../Services/HttpGameService';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,6 +12,7 @@ import { MatInput } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { GameStatusDialog } from '../game-status-dialog/game-status-dialog';
 import { UserGameRelationDto } from '../../../Dtos/UserGameRelationDto';
+import { HttpUserService } from '../../../Services/HttpUserService';
 @Component({
   selector: 'app-games-catalog-dialog',
   imports: [CommonModule,ReactiveFormsModule,MatInput,MatCardModule,DatePipe,MatButtonModule,MatDialogModule,MatSelectModule],
@@ -27,7 +28,9 @@ export class GamesCatalogDialog implements OnInit {
   searchValue='';
   orderValue='';
   categorieValue='';
-  constructor(private readonly dialogRef: MatDialogRef<GamesCatalogDialog>,private readonly gamesApi:HttpGameService, private readonly dialog: MatDialog){
+  loading = signal(false);
+  laodMoreVisible = signal(false);
+  constructor(private readonly dialogRef: MatDialogRef<GamesCatalogDialog>,private readonly gamesApi:HttpGameService, private readonly dialog: MatDialog,private readonly userService:HttpUserService) {
     this.searchControl.valueChanges
     .pipe(
         debounceTime(300),             // Wait 300ms after the last keystroke
@@ -35,7 +38,7 @@ export class GamesCatalogDialog implements OnInit {
       )
     .subscribe(value => {
       this.searchValue = value!;
-      gamesApi.getAllFiltered(this.orderValue, this.categorieValue, this.searchValue, this.currentPage, this.pageSize).subscribe(games => { this.games = games });
+      this.LoadGames();
     });
   }
 
@@ -45,11 +48,26 @@ export class GamesCatalogDialog implements OnInit {
   }
 
   LoadGames(){
-    this.gamesApi.getAllFiltered(this.orderValue,this.categorieValue,this.searchValue,this.currentPage,this.pageSize).subscribe(games => { 
+    this.loading.set(true);
+    this.currentPage=0;
+    this.gamesApi.getAvailableGames(this.orderValue,this.categorieValue,this.searchValue,this.currentPage,this.pageSize,this.userService.currentUserSig()?.id).subscribe(games => { 
       this.games=games;
+      this.loading.set(false);
+      if(games.length==this.pageSize){ 
+        this.laodMoreVisible.set(false);
+      }
     });
   }
-
+  LoadMoreGames(){
+    this.currentPage++;
+    this.gamesApi.getAvailableGames(this.orderValue,this.categorieValue,this.searchValue,this.currentPage,this.pageSize,this.userService.currentUserSig()?.id).subscribe(games => { 
+      this.laodMoreVisible.set(true);
+      this.games = this.games.concat(games);
+      if(games.length==this.pageSize){ 
+        this.laodMoreVisible.set(false);
+      }
+    });
+  }
   orderByOptions = [
     { value: 'publishDateLH', label: 'Publish Date Low to High' },
     { value: 'publishDateHL', label: 'Publish Date High to Low' },

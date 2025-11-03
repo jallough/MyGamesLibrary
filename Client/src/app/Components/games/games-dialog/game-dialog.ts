@@ -108,7 +108,7 @@ export class GameDialog {
     if (this.mode === 'add') {
       this.api.create(finalPayload).subscribe({ next: res => this.dialogRef.close(true), error: handleError });
     } else if (this.mode === 'edit' && this.data.game) {
-      this.api.update(this.data.game.id, finalPayload).subscribe({ next: res => this.dialogRef.close(true), error: handleError });
+      this.api.update( finalPayload).subscribe({ next: res => this.dialogRef.close(true), error: handleError });
     }
   }
 

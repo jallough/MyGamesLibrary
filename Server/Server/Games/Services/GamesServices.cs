@@ -310,5 +310,79 @@ namespace Server.Games.Services
                 throw;
             }
         }
+
+        public async Task<List<GamesEntity>> GetAvailableGamesByUserAsync(string? orderBy, string? filterByCategory, string? search, int page, int batch, long userId)
+        {
+            var userGames = await _gamesRepository.GetAllByUserAsync("", "", "", "", 0, int.MaxValue, userId);
+            var games = await cacheservice.GetAsync<List<GamesEntity>>(_cacheKey);
+            games = games?.Where(g => !userGames.Any(ug => ug.GameId == g.Id)).ToList() ?? new List<GamesEntity>();
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                games = games.Where(g => g.Title.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+            if (!string.IsNullOrWhiteSpace(filterByCategory))
+            {
+                switch (filterByCategory)
+                {
+                    case "action":
+                        games = games.Where(g => g.Genre == Genre.Action).ToList();
+                        break;
+                    case "adventure":
+                        games = games.Where(g => g.Genre == Genre.Adventure).ToList();
+                        break;
+                    case "rpg":
+                        games = games.Where(g => g.Genre == Genre.RPG).ToList();
+                        break;
+                    case "strategy":
+                        games = games.Where(g => g.Genre == Genre.Strategy).ToList();
+                        break;
+                    case "simulation":
+                        games = games.Where(g => g.Genre == Genre.Simulation).ToList();
+                        break;
+                    case "sports":
+                        games = games.Where(g => g.Genre == Genre.Sports).ToList();
+                        break;
+                    case "puzzle":
+                        games = games.Where(g => g.Genre == Genre.Puzzle).ToList();
+                        break;
+                    case "horror":
+                        games = games.Where(g => g.Genre == Genre.Horror).ToList();
+                        break;
+                    case "mmo":
+                        games = games.Where(g => g.Genre == Genre.MMO).ToList();
+                        break;
+                    case "indie":
+                        games = games.Where(g => g.Genre == Genre.Indie).ToList();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            if (!string.IsNullOrWhiteSpace(orderBy))
+            {
+                switch (orderBy)
+                {
+                    case "titleA":
+                        games = games.OrderBy(g => g.Title).ToList();
+                        break;
+                    case "titleD":
+                        games = games.OrderByDescending(g => g.Title).ToList();
+                        break;
+                    case "genreA":
+                        games = games.OrderBy(g => g.Genre).ToList();
+                        break;
+                    case "genreD":
+                        games = games.OrderByDescending(g => g.Genre).ToList();
+                        break;
+                    case "publishDateLH":
+                        games = games.OrderBy(g => g.ReleaseDate).ToList();
+                        break;
+                    default:
+                        games = games.OrderByDescending(g => g.ReleaseDate).ToList();
+                        break;
+                }
+            }
+            return games.Skip(page * batch).Take(batch).ToList();
+        }
     }
 }

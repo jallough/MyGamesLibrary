@@ -36,3 +36,6 @@
     </mat-card-actions>
   </mat-card>
 </div>
+<div *ngIf="!loading()" class="load-more-container">
+  <button mat-raised-button color="primary" (click)="LoadMoreGames()">Load More</button>
+</div>

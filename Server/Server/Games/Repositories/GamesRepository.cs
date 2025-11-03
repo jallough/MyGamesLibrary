@@ -103,10 +103,92 @@ namespace Server.Games.Repositories
 
         public async Task<List<GamesUserRelationEntity>> GetAllByUserAsync(string orderBy, string filterByCategory, string filterByStatus, string search, int page, int number, long userId)
         {
-            return await _context.GamesUserRelations
-                .Where(rel => rel.UserId == userId)
-                .Include(rel=>rel.Game)
-                .ToListAsync();
+            var query = _context.GamesUserRelations
+                .Include(rel => rel.Game)
+                .Where(rel => rel.UserId == userId);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(g => g.Game.Title.Contains(search, StringComparison.OrdinalIgnoreCase));
+            }
+            switch (filterByCategory)
+            {
+                case "action":
+                    query = query.Where(g => g.Game.Genre == Genre.Action);
+                    break;
+                case "adventure":
+                    query = query.Where(g => g.Game.Genre == Genre.Adventure);
+                    break;
+                case "rpg":
+                    query = query.Where(g => g.Game.Genre == Genre.RPG);
+                    break;
+                case "strategy":
+                    query = query.Where(g => g.Game.Genre == Genre.Strategy);
+                    break;
+                case "simulation":
+                    query = query.Where(g => g.Game.Genre == Genre.Simulation);
+                    break;
+                case "sports":
+                    query = query.Where(g => g.Game.Genre == Genre.Sports);
+                    break;
+                case "puzzle":
+                    query = query.Where(g => g.Game.Genre == Genre.Puzzle);
+                    break;
+                case "horror":
+                    query = query.Where(g => g.Game.Genre == Genre.Horror);
+                    break;
+                case "mmo":
+                    query = query.Where(g => g.Game.Genre == Genre.MMO);
+                    break;
+                case "indie":
+                    query = query.Where(g => g.Game.Genre == Genre.Indie);
+                    break;
+                default:
+                    break;
+            }
+            switch(filterByStatus)
+            {
+                case "playing":
+                    query = query.Where(g => g.Status == Status.playing);
+                    break;
+                case "completed":
+                    query = query.Where(g => g.Status == Status.completed);
+                    break;
+                case "onhold":
+                    query = query.Where(g => g.Status == Status.onhold);
+                    break;
+                case "dropped":
+                    query = query.Where(g => g.Status == Status.dropped);
+                    break;
+                case "plantoplay":
+                    query = query.Where(g => g.Status == Status.plantoplay);
+                    break;
+                default:
+                    break;
+            }
+            switch (orderBy)
+            {
+                case "titleA":
+                    query = query.OrderBy(g => g.Game.Title);
+                    break;
+                case "titleD":
+                    query = query.OrderByDescending(g => g.Game.Title);
+                    break;
+                case "genreA":
+                    query = query.OrderBy(g => g.Game.Genre);
+                    break;
+                case "genreD":
+                    query = query.OrderByDescending(g => g.Game.Genre);
+                    break;
+                case "publishDateLH":
+                    query = query.OrderBy(g => g.Game.ReleaseDate);
+                    break;
+                default:
+                    query = query.OrderByDescending(g => g.Game.ReleaseDate);
+                    break;
+
+            }
+            return await query.Skip(page * number).Take(number).ToListAsync();
         }
 
         public async Task AddRelation(GamesUserRelationEntity game)

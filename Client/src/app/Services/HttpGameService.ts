@@ -19,8 +19,8 @@ export class HttpGameService {
     getAllFilteredByUser(orderBy?:string,filterByCategory?: string, filterByStatus?:string, search?:string,page?:number,batch?:number,userId?:number): Observable<UserGameRelationDto[]> {
         return this.http.get<any[]>('Games/user/Filtered?orderBy=' + (orderBy ?? '') + '&filterByCategory=' + (filterByCategory ?? '') + '&filterByStatus=' + (filterByStatus ?? '') + '&search=' + (search ?? '') + '&page=' + (page ?? '') + '&batch=' + (batch ?? '') + '&userId=' + (userId));
     }
-    getAvailableGames(): Observable<GamesDto[]> {
-        return this.http.get<GamesDto[]>('Games/available');
+    getAvailableGames(orderBy?:string,filterByCategory?: string, search?:string,page?:number,batch?:number,userId?:number): Observable<GamesDto[]> {
+        return this.http.get<any[]>('Games/Available/Filtered?orderBy=' + (orderBy ?? '') + '&filterByCategory=' + (filterByCategory ?? '') + '&search=' + (search ?? '') + '&page=' + (page ?? '') + '&batch=' + (batch ?? '') + '&userId=' + (userId));
     }
 
     getGamesByUser(userId: number): Observable<GamesDto[]> {
@@ -41,8 +41,8 @@ export class HttpGameService {
     }
 
     // PUT api/games/{id}
-    update(id: number, game: Partial<GamesDto>): Observable<GamesDto> {
-        return this.http.put<GamesDto>(`Games/${id}`, game);
+    update(game: Partial<GamesDto>): Observable<GamesDto> {
+        return this.http.put<GamesDto>(`Games`, game);
     }
 
     // DELETE api/games/{id}

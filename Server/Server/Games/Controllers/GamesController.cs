@@ -41,10 +41,17 @@ public class GamesController : ControllerBase
 
     [Authorize]
     [HttpGet("user/Filtered")]
-    public async Task<IActionResult> GetGamesPagedByUser([FromQuery] string? orderBy, [FromQuery] string? filterByCategory, [FromQuery] string? filterByStatus ,[FromQuery] string? search, [FromQuery] int page, [FromQuery] int number, [FromQuery] long userId)
+    public async Task<IActionResult> GetGamesPagedByUser([FromQuery] string? orderBy, [FromQuery] string? filterByCategory, [FromQuery] string? filterByStatus ,[FromQuery] string? search, [FromQuery] int page, [FromQuery] int batch, [FromQuery] long userId)
     {
         //TODO: Filter by user
-        var games = await _gamesServices.GetAllByUserAsync(orderBy,filterByCategory,filterByStatus,search, page, number,userId);
+        var games = await _gamesServices.GetAllByUserAsync(orderBy,filterByCategory,filterByStatus,search, page, batch,userId);
+        return Ok(games);
+    }
+    [Authorize]
+    [HttpGet("Available/Filtered")]
+    public async Task<IActionResult> GetAvailableGamesByUser([FromQuery] string? orderBy, [FromQuery] string? filterByCategory, [FromQuery] string? search, [FromQuery] int page, [FromQuery] int batch, [FromQuery] long userId)
+    {
+        var games = await _gamesServices.GetAvailableGamesByUserAsync(orderBy, filterByCategory, search, page, batch, userId);
         return Ok(games);
     }
     [Authorize]
@@ -74,7 +81,7 @@ public class GamesController : ControllerBase
     [Authorize(Roles = "Admin")]
     // GET: api/games/5
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById([FromHeader] long id)
+    public async Task<IActionResult> GetById([FromRoute] long id)
     {
         var game = await _gamesServices.GetByIdAsync(id);
         if (game == null)
@@ -107,12 +114,10 @@ public class GamesController : ControllerBase
     }
     [Authorize(Roles = "Admin")]
     // PUT: api/games/5
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update([FromHeader] long id,[FromBody] GamesEntity updated)
+    [HttpPut]
+    public async Task<IActionResult> Update([FromBody] GamesEntity updated)
     {
-        if (updated == null || id != updated.Id)
-            return BadRequest();
-
+       
         try
         {
             await _gamesServices.UpdateAsync(updated);  

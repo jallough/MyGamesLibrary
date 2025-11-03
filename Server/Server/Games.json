@@ -37,6 +37,102 @@
       "Genre": "Adventure",
       "ReleaseDate": "09.06.2024",
       "ImageUrl": "https://www.gameaccessibilitynexus.com/wp-content/uploads/2024/09/Astro-Bot-Header-02.png"
+    },
+    {
+      "Title": "Elden Ring",
+      "Genre": "Adventure",
+      "ReleaseDate": "02.25.2022",
+      "ImageUrl": "https://www.nintendo.com/eu/media/images/assets/nintendo_switch_2_games/eldenringtarnishededition/2x1_NSwitch2_EldenRing.jpg"
+    },
+    {
+      "Title": "Clair Obscur: Expedition 33",
+      "Genre": "Action",
+      "ReleaseDate": "04.24.2025",
+      "ImageUrl": "https://cdn1.epicgames.com/spt-assets/330dace5ffc74156987f91d454ac544b/project-w-1kt2x.jpg"
+    },
+    {
+      "Title": "The Legend of Zelda: Breath of the Wild",
+      "Genre": "Adventure",
+      "ReleaseDate": "03.03.2017",
+      "ImageUrl": "https://gaming-cdn.com/images/products/2616/orig/the-legend-of-zelda-breath-of-the-wild-switch-spiel-nintendo-eshop-europe-cover.jpg?v=1730381682"
+    },
+    {
+      "Title": "Black Myth: Wukong",
+      "Genre": "Adventure",
+      "ReleaseDate": "08.20.2024",
+      "ImageUrl": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2358720/header.jpg?t=1760601605"
+    },
+    {
+      "Title": "WUCHANG Fallen Feathers",
+      "Genre": "Adventure",
+      "ReleaseDate": "07.23.2025",
+      "ImageUrl": "https://cdn1.epicgames.com/spt-assets/61237a4bad9f482a9ad1a1ac74520bba/wuchang-fallen-feathers-199kj.jpg"
+    },
+    {
+      "Title": "League of Legends",
+      "Genre": "Action",
+      "ReleaseDate": "10.27.2009",
+      "ImageUrl": "https://cdn1.epicgames.com/offer/24b9b5e323bc40eea252a10cdd3b2f10/EGS_LeagueofLegends_RiotGames_S1_2560x1440-47eb328eac5ddd63ebd096ded7d0d5ab"
+    },
+    {
+      "Title": "Valorant",
+      "Genre": "Action",
+      "ReleaseDate": "06.02.2020",
+      "ImageUrl": "https://www.riotgames.com/darkroom/1440/8d5c497da1c2eeec8cffa99b01abc64b:5329ca773963a5b739e98e715957ab39/ps-f2p-val-console-launch-16x9.jpg"
+    },
+    {
+      "Title": "2XKO",
+      "Genre": "Action",
+      "ReleaseDate": "10.07.2025",
+      "ImageUrl": "https://gaming-cdn.com/images/products/14680/orig/2xko-pc-cover.jpg?v=1759914161"
+    },
+    {
+      "Title": "Mario Kart 8 Deluxe",
+      "Genre": "Sports",
+      "ReleaseDate": "04.28.2017",
+      "ImageUrl": "https://www.nintendo.com/eu/media/images/10_share_images/games_15/nintendo_switch_4/H2x1_NSwitch_MarioKart8Deluxe_image1600w.jpg"
+    },
+    {
+      "Title": "Hades",
+      "Genre": "Indie",
+      "ReleaseDate": "12.10.2019",
+      "ImageUrl": "https://www.nintendo.com/eu/media/images/10_share_images/games_15/nintendo_switch_download_software_1/H2x1_NSwitchDS_Hades_image1600w.png"
+    },
+    {
+      "Title": "Hades II",
+      "Genre": "Indie",
+      "ReleaseDate": "09.25.2025",
+      "ImageUrl": "https://assets.nintendo.com/image/upload/ar_16:9,c_lpad,w_1240/b_white/f_auto/q_auto/store/software/switch2/70010000105526/75473d99ae0d87abda2bf0979c0886a78a1ec9debd46fa77b6c5f19b9c7ab175"
+    },
+    {
+      "Title": "Cult of the Lamb",
+      "Genre": "Indie",
+      "ReleaseDate": "06.10.2022",
+      "ImageUrl": "https://images.kinguin.net/yt/carousel-main-mobile/vi/CI6D2iYCTcU/maxresdefault.jpg"
+    },
+    {
+      "Title": "Hollow Knight",
+      "Genre": "Indie",
+      "ReleaseDate": "02.24.2017",
+      "ImageUrl": "https://www.nintendo.com/eu/media/images/10_share_images/games_15/wiiu_download_software_5/H2x1_WiiUDS_HollowKnight.jpg"
+    },
+    {
+      "Title": "Hollow Knight: Silksong",
+      "Genre": "Indie",
+      "ReleaseDate": "https://assets.nintendo.com/image/upload/f_auto/q_auto/dpr_1.5/c_scale,w_400/store/software/switch2/70010000105851/8787627be7f26ae7984456ffd9af17bea845032cebbf59fe6eeb596dea6bb20e",
+      "ImageUrl": "09.04.2025"
+    },
+    {
+      "Title": "Ori and the Will of the Wisps",
+      "Genre": "Indie",
+      "ReleaseDate": "03.11.2020",
+      "ImageUrl": "https://www.nintendo.com/eu/media/images/10_share_images/games_15/nintendo_switch_4/H2x1_NSwitch_OriAndTheWillOfTheWisps_image1600w.jpg"
+    },
+    {
+      "Title": "Ori and the Blind Forest",
+      "Genre": "Indie",
+      "ReleaseDate": "05.11.2015",
+      "ImageUrl": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/261570/capsule_616x353.jpg?t=1667504148"
     }
   ]
 }

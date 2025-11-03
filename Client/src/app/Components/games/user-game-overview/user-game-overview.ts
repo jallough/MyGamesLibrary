@@ -82,17 +82,38 @@ export class UserGameOverview implements OnInit{
 
   LoadGames(){
     this.loading.set(true);
+    this.currentPage=0;
     this.gamesService.getAllFilteredByUser(this.orderValue,this.categorieValue,this.statusValue,this.searchValue,this.currentPage,this.pageSize,this.userService.currentUserSig()?.id)
-    .subscribe(games=>{this.userGames=games;this.loading.set(false);}); 
+    .subscribe(games=>{
+      this.userGames=games;
+      this.loading.set(false);
+      if(games.length<this.pageSize){ 
+        this.loading.set(true);
+      }
+    }); 
     
   }
-
+  LoadMoreUserGames(){
+    this.currentPage++;
+    this.loading.set(true);
+    this.gamesService.getAllFilteredByUser(this.orderValue,this.categorieValue,this.statusValue,this.searchValue,this.currentPage,this.pageSize,this.userService.currentUserSig()?.id)
+    .subscribe(games=>{
+      this.userGames=this.userGames.concat(games);
+      if(games.length==this.pageSize){ 
+        this.loading.set(false);
+      }
+    });
+  }
   public onOrderByChange(selectedValue: string) {
     this.orderValue = selectedValue;
     this.LoadGames();
   }
 
-  public onFilterByChange(selectedValue: string) {
+  public onFilterByStatusChange(selectedValue: string) {
+    this.statusValue = selectedValue;
+    this.LoadGames();
+  }
+  public onFilterCategorieByChange(selectedValue: string) {
     this.categorieValue = selectedValue;
     this.LoadGames();
   }

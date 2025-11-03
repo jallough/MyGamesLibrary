@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -58,7 +58,7 @@ export class GamesListComponent{
     { value: 'mmo', label: 'MMO' },
     { value: 'indie', label: 'Indie' }
   ];
-
+  loading = signal(false);
   searchControl = new FormControl('');
 
   constructor(private readonly gamesApi: HttpGameService) {
@@ -73,8 +73,13 @@ export class GamesListComponent{
     });
   }
   LoadGames(){
+    this.loading.set(true);
+    this.currentPage=0;
     this.gamesApi.getAllFiltered(this.orderValue,this.categorieValue,this.searchValue,this.currentPage,this.pageSize).subscribe(games => { 
       this.games=games;
+      if(games.length==this.pageSize){ 
+        this.loading.set(false);
+      }
     });
   }
   public onOrderByChange(selectedValue: string) {
@@ -86,5 +91,14 @@ export class GamesListComponent{
     this.categorieValue = selectedValue;
     this.LoadGames();
   }
-
+  LoadMoreGames(){
+    this.currentPage++;
+    this.loading.set(true);
+    this.gamesApi.getAllFiltered(this.orderValue,this.categorieValue,this.searchValue,this.currentPage,this.pageSize).subscribe(games => { 
+      this.games = this.games.concat(games);
+      if(games.length==this.pageSize){ 
+        this.loading.set(false);
+      }
+    });
+  }
 }

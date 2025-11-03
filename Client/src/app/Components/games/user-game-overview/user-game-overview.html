@@ -13,7 +13,7 @@
 </mat-form-field>
 <mat-form-field style="padding: 0px 10px;">
       <mat-label>Filter By Categories</mat-label>
-      <mat-select value="all" (selectionChange)="onFilterByChange($event.value)">
+      <mat-select value="all" (selectionChange)="onFilterCategorieByChange($event.value)">
         @for (opt of filterByCategoryOptions; track opt) {
           <mat-option [value]="opt.value">{{opt.label}}</mat-option>
         }
@@ -21,7 +21,7 @@
 </mat-form-field>
 <mat-form-field>
       <mat-label >Filter By Status</mat-label>
-      <mat-select value="all" (selectionChange)="onFilterByChange($event.value)">
+      <mat-select value="all" (selectionChange)="onFilterByStatusChange($event.value)">
         @for (opt of filterByOptions; track opt) {
           <mat-option [value]="opt.value">{{opt.label}}</mat-option>
         }
@@ -32,7 +32,7 @@
   <input matInput id="Search" type="text" placeholder="Search" [formControl]="searchControl"/>
 </mat-form-field>
 </div>
-<div *ngIf="!loading()" class="cards">
+<div class="cards">
 @for (g of userGames; track g.id) {
   <mat-card  class="game-card">
     <img mat-card-image [src]="g.game.imageUrl" alt="{{g.game.title}}" />
@@ -50,4 +50,7 @@
     </mat-card-actions>
   </mat-card>
 }
+</div>
+<div *ngIf="!loading()" class="load-more-container">
+  <button mat-raised-button color="primary" (click)="LoadMoreUserGames()">Load More</button>
 </div>

@@ -15,5 +15,6 @@ namespace Server.Games.Services
         Task AddGameByUserAsync(GamesUserRelationEntity game);
         Task UpdateGameByUserAsync(GamesUserRelationEntity game);
         Task DeleteGameByUserAsync(long id);
+        Task<List<GamesEntity>> GetAvailableGamesByUserAsync(string? orderBy, string? filterByCategory, string? search, int page, int batch, long userId);
     }
 }

@@ -8,7 +8,13 @@ namespace Server.Users.Repositories
     {
         public async Task AddUser(UserEntity userEntity)
         {
-            try { 
+            try {
+                var existingUser = await _dbContext.Users
+                    .FirstOrDefaultAsync(u => u.Username == userEntity.Username || u.Email == userEntity.Email);
+                if (existingUser != null)
+                {
+                    throw new InvalidOperationException("User with the same username or email already exists.");
+                }
                 _dbContext.Users.Add(userEntity);
                 await _dbContext.SaveChangesAsync();
             }

@@ -1,12 +1,9 @@
 <mat-dialog-content>
   <div class="login-card">
     <h2>Login</h2>
-
-    
       <mat-form-field appearance="outline" >
         <input matInput placeholder="Username or Email" [(ngModel)]="email" />
       </mat-form-field>
-
       <mat-form-field appearance="outline">
         <input matInput placeholder="Password" type="password" [type]="hide() ? 'password' : 'text'" [(ngModel)]="password"/>
         <button
@@ -25,7 +22,7 @@
       <a class="forgot-password" href="#">Forgot your password?</a>
     
 
-    <p class="signup-text">Don’t have an account? <a href="#">Sign up</a></p>
+    <p class="signup-text">Don't have an account? <a (click)="Register()">Sign up</a></p>
 
 </div>
 </mat-dialog-content>

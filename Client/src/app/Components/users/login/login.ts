@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { HttpUserService } from '../../../Services/HttpUserService';
 import { UserDto } from '../../../Dtos/UserDto';
-import { Router } from '@angular/router';
-import { MatDialogRef, MatDialogActions, MatDialogContent} from '@angular/material/dialog';
+import { MatDialogRef, MatDialogActions, MatDialogContent, MatDialog} from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { Register } from '../register/register';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +21,7 @@ export class Login {
   password = '';
   errorMessage = '';
 
-  constructor (private readonly userService :HttpUserService, private readonly router:Router,private readonly dialogRef: MatDialogRef<Login>) {}
+  constructor (private readonly userService :HttpUserService,private readonly dialog: MatDialog, private readonly dialogRef: MatDialogRef<Login>) {}
   hide = signal(true);
     clickEvent(event: MouseEvent) {
     this.hide.set(!this.hide());
@@ -44,7 +44,12 @@ export class Login {
         }
       });
   }
-
+  Register() {
+    const ref = this.dialog.open(Register, {
+      width: '680px'
+    });
+    this.close();
+  }
   close() {
     this.dialogRef.close();
   }

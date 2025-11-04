@@ -30,7 +30,7 @@ namespace Server.Users.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error during login: {ex.Message}");
             }
         }
-        [HttpPost("add")]
+        [HttpPost("register")]
         public async Task<IActionResult> AddUser([FromBody] UserEntity userEntity)
         {
             if (userEntity == null)

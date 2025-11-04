@@ -40,7 +40,7 @@ namespace Server.Users.Controllers
             try
             {
                 await _usersService.AddUser(userEntity);
-                return Ok("User added successfully.");
+                return Ok();
             }
             catch (InvalidOperationException ex)
             {

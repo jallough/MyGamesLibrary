@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -61,7 +61,9 @@ export class GamesListComponent{
   loading = signal(false);
   searchControl = new FormControl('');
 
-  constructor(private readonly gamesApi: HttpGameService) {
+  constructor(private readonly gamesApi: HttpGameService,
+    private readonly cdr: ChangeDetectorRef
+  ) {
     this.searchControl.valueChanges
     .pipe(
         debounceTime(300),             // Wait 300ms after the last keystroke
@@ -73,12 +75,12 @@ export class GamesListComponent{
     });
   }
   LoadGames(){
-    this.loading.set(true);
     this.currentPage=0;
     this.gamesApi.getAllFiltered(this.orderValue,this.categorieValue,this.searchValue,this.currentPage,this.pageSize).subscribe(games => { 
       this.games=games;
-      if(games.length==this.pageSize){ 
-        this.loading.set(false);
+      this.cdr.detectChanges();
+      if(games.length<this.pageSize){ 
+        this.loading.set(true);
       }
     });
   }
@@ -91,13 +93,14 @@ export class GamesListComponent{
     this.categorieValue = selectedValue;
     this.LoadGames();
   }
+  
   LoadMoreGames(){
     this.currentPage++;
-    this.loading.set(true);
     this.gamesApi.getAllFiltered(this.orderValue,this.categorieValue,this.searchValue,this.currentPage,this.pageSize).subscribe(games => { 
       this.games = this.games.concat(games);
-      if(games.length==this.pageSize){ 
-        this.loading.set(false);
+      this.cdr.detectChanges();
+      if(games.length<this.pageSize){ 
+        this.loading.set(true);
       }
     });
   }

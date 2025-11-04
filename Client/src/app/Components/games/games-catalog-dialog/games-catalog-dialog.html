@@ -22,7 +22,7 @@
   <input matInput  placeholder="Search" [formControl]="searchControl"/>
 </mat-form-field>
 </div>
-<div *ngIf="!loading()" class="cards">
+<div class="cards">
   <mat-card *ngFor="let g of games" class="game-card clickable" (click)="selectGame(g)">
     <img mat-card-image *ngIf="g.imageUrl" [src]="g.imageUrl" alt="{{g.title}}" />
     <mat-card-header>
@@ -34,7 +34,7 @@
     </mat-card-content>
   </mat-card>
 </div>
-<div *ngIf="!laodMoreVisible()" class="load-more-container">
+<div *ngIf="laodMoreVisible()" class="load-more-container">
   <button mat-raised-button color="primary" (click)="LoadMoreGames()">Load More</button>
 </div>
 </mat-dialog-content>

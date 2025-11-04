@@ -4,14 +4,6 @@ import { Observable, tap } from "rxjs";
 import { UserDto } from "../Dtos/UserDto";
 import {jwtDecode} from "jwt-decode";
 import { Router } from "@angular/router";
-interface JwtPayload {
-  sub?: string;
-  name?: string;
-  emailaddress?: string;
-  role?: string;
-  exp?: number;
-  [key: string]: any;
-}
 
 @Injectable({ providedIn: 'root' })
 export class HttpUserService {

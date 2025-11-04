@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
 import { MatDialogRef, MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { HttpGameService } from '../../../Services/HttpGameService';
 import { MatButtonModule } from '@angular/material/button';
@@ -28,9 +28,12 @@ export class GamesCatalogDialog implements OnInit {
   searchValue='';
   orderValue='';
   categorieValue='';
-  loading = signal(false);
-  laodMoreVisible = signal(false);
-  constructor(private readonly dialogRef: MatDialogRef<GamesCatalogDialog>,private readonly gamesApi:HttpGameService, private readonly dialog: MatDialog,private readonly userService:HttpUserService) {
+  laodMoreVisible = signal(true);
+  constructor(private readonly dialogRef: MatDialogRef<GamesCatalogDialog>,
+    private readonly gamesApi:HttpGameService, 
+    private readonly dialog: MatDialog,
+    private readonly userService:HttpUserService,
+    private cdr: ChangeDetectorRef) {
     this.searchControl.valueChanges
     .pipe(
         debounceTime(300),             // Wait 300ms after the last keystroke
@@ -48,12 +51,11 @@ export class GamesCatalogDialog implements OnInit {
   }
 
   LoadGames(){
-    this.loading.set(true);
     this.currentPage=0;
     this.gamesApi.getAvailableGames(this.orderValue,this.categorieValue,this.searchValue,this.currentPage,this.pageSize,this.userService.currentUserSig()?.id).subscribe(games => { 
       this.games=games;
-      this.loading.set(false);
-      if(games.length==this.pageSize){ 
+      this.cdr.detectChanges();
+      if(games.length<this.pageSize){ 
         this.laodMoreVisible.set(false);
       }
     });
@@ -61,9 +63,9 @@ export class GamesCatalogDialog implements OnInit {
   LoadMoreGames(){
     this.currentPage++;
     this.gamesApi.getAvailableGames(this.orderValue,this.categorieValue,this.searchValue,this.currentPage,this.pageSize,this.userService.currentUserSig()?.id).subscribe(games => { 
-      this.laodMoreVisible.set(true);
       this.games = this.games.concat(games);
-      if(games.length==this.pageSize){ 
+      this.cdr.detectChanges();
+      if(games.length<this.pageSize){ 
         this.laodMoreVisible.set(false);
       }
     });

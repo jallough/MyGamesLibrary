@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
 import { UserGameRelationDto } from '../../../Dtos/UserGameRelationDto';
 import { HttpGameService } from '../../../Services/HttpGameService';
 import { HttpUserService } from '../../../Services/HttpUserService';
@@ -23,7 +23,10 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './user-game-overview.css'
 })
 export class UserGameOverview implements OnInit{
-  constructor(private readonly gamesService:HttpGameService,private readonly userService:HttpUserService,private readonly dialog:MatDialog){
+  constructor(private readonly gamesService:HttpGameService,
+    private readonly userService:HttpUserService,
+    private readonly dialog:MatDialog,
+    private readonly cdr: ChangeDetectorRef) {
     this.searchControl.valueChanges
         .pipe(
             debounceTime(300),             // Wait 300ms after the last keystroke
@@ -81,12 +84,11 @@ export class UserGameOverview implements OnInit{
   }
 
   LoadGames(){
-    this.loading.set(true);
     this.currentPage=0;
     this.gamesService.getAllFilteredByUser(this.orderValue,this.categorieValue,this.statusValue,this.searchValue,this.currentPage,this.pageSize,this.userService.currentUserSig()?.id)
     .subscribe(games=>{
       this.userGames=games;
-      this.loading.set(false);
+      this.cdr.detectChanges();
       if(games.length<this.pageSize){ 
         this.loading.set(true);
       }
@@ -95,12 +97,12 @@ export class UserGameOverview implements OnInit{
   }
   LoadMoreUserGames(){
     this.currentPage++;
-    this.loading.set(true);
     this.gamesService.getAllFilteredByUser(this.orderValue,this.categorieValue,this.statusValue,this.searchValue,this.currentPage,this.pageSize,this.userService.currentUserSig()?.id)
     .subscribe(games=>{
       this.userGames=this.userGames.concat(games);
-      if(games.length==this.pageSize){ 
-        this.loading.set(false);
+      this.cdr.detectChanges();
+      if(games.length<this.pageSize){ 
+        this.loading.set(true);
       }
     });
   }

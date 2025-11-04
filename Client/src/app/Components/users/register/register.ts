@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectorRef } from '@angular/core';
 import { HttpUserService } from '../../../Services/HttpUserService';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
@@ -23,7 +23,8 @@ export class Register {
     private readonly userService: HttpUserService,
     private readonly dialog: MatDialog,
     private readonly dialogRef: MatDialogRef<Register>,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private cdr: ChangeDetectorRef
   ) {
     this.registerForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
@@ -69,23 +70,26 @@ export class Register {
       this.registerForm.markAllAsTouched();
       
       // Check each control and set specific error messages
-      Object.keys(this.registerForm.controls).forEach(key => {
+      for (const key of Object.keys(this.registerForm.controls)) {
         const control = this.registerForm.get(key);
         if (control?.errors) {
           this.errorMessage = this.getErrorMessage(key);
-          return;
+          this.cdr.detectChanges();
+          break;
         }
-      });
+      }
 
       // Check for password match error specifically
       if (this.registerForm.errors?.['mismatch']) {
         this.errorMessage = 'Passwords do not match';
+        this.cdr.detectChanges();
       }
       return;
     }
 
-    // Clear any previous error messages
-    this.errorMessage = '';
+  // Clear any previous error messages
+  this.errorMessage = '';
+  this.cdr.detectChanges();
     const formValue = this.registerForm.value;
     const user = {
       email: formValue.email,
@@ -96,15 +100,14 @@ export class Register {
     this.userService.register(user)
       .subscribe({
         next: () => {
-          const ref = this.dialog.open(Login, {
-            width: '400px'
-          });
+          this.dialog.open(Login, { width: '680px'});
           this.close();
         },
         error: err => {
           console.error(err);
           console.error(err.error);
           this.errorMessage = err.error;
+          this.cdr.detectChanges();
         }
       });
   }

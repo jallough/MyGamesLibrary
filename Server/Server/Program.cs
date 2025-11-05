@@ -7,8 +7,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
+if (builder.Environment.IsProduction())
+{
+        builder.WebHost.UseUrls("http://0.0.0.0:80"); //for docker
+}
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -60,14 +62,21 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
-
-app.UseHttpsRedirection();
-
+else 
+{
+    app.UseHttpsRedirection();
+}
 // Enable CORS for the configured policy
 app.UseCors("AllowAngularDev");
 
+app.UseStaticFiles();
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
+
+// Add SPA fallback to serve index.html for unmatched routes
+app.MapFallbackToFile("index.html");
 
 app.Run();

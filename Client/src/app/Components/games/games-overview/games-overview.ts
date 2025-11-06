@@ -27,7 +27,10 @@ export class GamesOverview implements OnInit{
     
     loadGames() {
       this.loading.set(true);
-      this.gamesApi.getAllFiltered(undefined,undefined,undefined,0,10).subscribe(g=> {this.games = g; this.loading.set(false);} );
+      this.gamesApi.getAllFiltered(undefined,undefined,undefined,0,10).subscribe(g=> {
+        this.games = g; 
+        this.loading.set(false);
+      } );
       
     }
   

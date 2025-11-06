@@ -57,6 +57,8 @@ export class GamesCatalogDialog implements OnInit {
       this.cdr.detectChanges();
       if(games.length<this.pageSize){ 
         this.laodMoreVisible.set(false);
+      }else{
+        this.laodMoreVisible.set(true);
       }
     });
   }
@@ -67,6 +69,9 @@ export class GamesCatalogDialog implements OnInit {
       this.cdr.detectChanges();
       if(games.length<this.pageSize){ 
         this.laodMoreVisible.set(false);
+      }
+      else{
+        this.laodMoreVisible.set(true);
       }
     });
   }

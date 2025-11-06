@@ -41,9 +41,9 @@ export class Login {
         error: err => {
           console.error(err);
           this.errorMessage = 'Invalid Credentials';
+          this.cdr.detectChanges();
         }
       });
-    this.cdr.detectChanges();
   }
   Register() {
     const ref = this.dialog.open(Register, {

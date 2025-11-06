@@ -58,7 +58,7 @@ export class GamesListComponent{
     { value: 'mmo', label: 'MMO' },
     { value: 'indie', label: 'Indie' }
   ];
-  loading = signal(false);
+  loading = signal(true);
   searchControl = new FormControl('');
 
   constructor(private readonly gamesApi: HttpGameService,
@@ -81,6 +81,8 @@ export class GamesListComponent{
       this.cdr.detectChanges();
       if(games.length<this.pageSize){ 
         this.loading.set(true);
+      }else{
+        this.loading.set(false);
       }
     });
   }
@@ -101,6 +103,8 @@ export class GamesListComponent{
       this.cdr.detectChanges();
       if(games.length<this.pageSize){ 
         this.loading.set(true);
+      }else{
+        this.loading.set(false);
       }
     });
   }

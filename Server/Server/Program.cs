@@ -76,7 +76,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Add SPA fallback to serve index.html for unmatched routes
-app.MapFallbackToFile("index.html");
-
 app.Run();

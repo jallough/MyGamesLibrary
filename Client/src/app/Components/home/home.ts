@@ -1,5 +1,5 @@
 
-import { Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,7 +19,7 @@ export class Home implements OnInit {
   games$!: GamesDto[];
   loading = signal(false);
 
-  constructor(private readonly gamesApi: HttpGameService) {}
+  constructor(private readonly cdr:ChangeDetectorRef,private readonly gamesApi: HttpGameService) {}
 
   ngOnInit(): void {
     this.loadGames();
@@ -30,10 +30,8 @@ export class Home implements OnInit {
     this.gamesApi.getAllFiltered(undefined,undefined,undefined,0,10).subscribe(games => {
       this.games$ = games;
       this.loading.set(false);
+      this.cdr.detectChanges();
     });
   }
 
-  deleteGame(id: number) {
-    this.gamesApi.delete(id).subscribe(() => this.loadGames());
-  }
 }

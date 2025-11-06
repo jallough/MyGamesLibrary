@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, signal } from '@angular/core';
 import { HttpUserService } from '../../../Services/HttpUserService';
 import { UserDto } from '../../../Dtos/UserDto';
 import { MatDialogRef, MatDialogActions, MatDialogContent, MatDialog} from '@angular/material/dialog';
@@ -21,7 +21,7 @@ export class Login {
   password = '';
   errorMessage = '';
 
-  constructor (private readonly userService :HttpUserService,private readonly dialog: MatDialog, private readonly dialogRef: MatDialogRef<Login>) {}
+  constructor (private readonly cdr: ChangeDetectorRef ,private readonly userService :HttpUserService,private readonly dialog: MatDialog, private readonly dialogRef: MatDialogRef<Login>) {}
   hide = signal(true);
     clickEvent(event: MouseEvent) {
     this.hide.set(!this.hide());
@@ -43,6 +43,7 @@ export class Login {
           this.errorMessage = 'Invalid Credentials';
         }
       });
+    this.cdr.detectChanges();
   }
   Register() {
     const ref = this.dialog.open(Register, {

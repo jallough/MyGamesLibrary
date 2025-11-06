@@ -12,13 +12,18 @@ namespace Server.DBContext
         {
             try
             {
-                if(configuration.GetValue<bool>("Migrate"))
+                if (configuration.GetValue<bool>("Migrate"))
                 {
                     await context.Database.MigrateAsync();
                     logger.LogInformation("Base de données créée/migrée avec succès.");
                 }
                 if (configuration.GetValue<bool>("Initialize"))
                 {
+                    if (context.Games.Any())
+                    {
+                        logger.LogInformation("La base de données est déjà initialisée.");
+                        return;
+                    }
                     var config = new ConfigurationBuilder();
                     var conf =config.AddJsonFile("Games.json").Build();
                     var games = conf.GetSection("Games").Get<List<GamesEntity>>().ToList();

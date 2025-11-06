@@ -9,5 +9,5 @@ export const routes: Routes = [
     {path: '', component: Home},
     {path: 'Games', component: UserGameOverview, canActivate: [AuthGuard]},
     {path: 'login', component : Login},
-    {path: 'GamesConfig', component:GamesOverview, canActivate: [AuthGuard]}
+    {path: 'GamesConfig', component:GamesOverview, canActivateChild: [AuthGuard]}
 ];

@@ -58,7 +58,7 @@ export class GamesListComponent{
     { value: 'mmo', label: 'MMO' },
     { value: 'indie', label: 'Indie' }
   ];
-  loading = signal(true);
+  loading = signal(false);
   searchControl = new FormControl('');
 
   constructor(private readonly gamesApi: HttpGameService,

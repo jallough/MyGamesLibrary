@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Server.Games.Entities;
+using Server.Models;
 using Server.Users.Entities;
 
 namespace Server.Shared
@@ -14,6 +15,10 @@ namespace Server.Shared
         {
             var config = new MapperConfiguration(cfg =>
             {
+                cfg.CreateMap<UserEntity,UserDto>()
+                .ReverseMap()
+                .ForMember(dto => dto.RefreshTokenExpiryTime, opt => opt.Ignore())
+                .ForMember(dto => dto.RefreshToken, opt => opt.Ignore());
                 cfg.CreateMap<GamesEntity, GamesEntity>()
                 .ForMember(g=>g.CreatedAt, opt=>opt.Ignore());
                 cfg.CreateMap<UserEntity, UserEntity>()

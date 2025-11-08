@@ -1,4 +1,5 @@
-﻿using Server.Users.Entities;
+﻿using Server.Models;
+using Server.Users.Entities;
 
 namespace Server.Users.Services
 {
@@ -6,7 +7,8 @@ namespace Server.Users.Services
     {
         Task AddUser(UserEntity userEntity);
         Task UpdateUser(UserEntity userEntity);
-        Task<string?> Login(UserEntity userEntity);
+        Task<TokenResponseDto?> Login(UserDto userDto);
         Task DeleteUser(UserEntity user);
+        Task<TokenResponseDto?> RefreshTokensAsync(RefreshTokenRequestDto refreshTokenRequest);
     }
 }

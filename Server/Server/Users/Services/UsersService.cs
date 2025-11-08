@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+using Server.Models;
 using Server.Users.Entities;
 using Server.Users.Repositories;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Server.Users.Services
@@ -18,6 +20,8 @@ namespace Server.Users.Services
             {
                 _logger.LogInformation("Adding a new user: {Username}", userEntity.Username);
                 HashPassword(ref userEntity);
+                userEntity.RefreshToken = GenerateRefreshToken();
+                userEntity.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
                 await _usersRepository.AddUser(userEntity);
                 _logger.LogInformation("User added successfully: {Username}", userEntity.Username);
             }
@@ -38,7 +42,10 @@ namespace Server.Users.Services
                     _logger.LogWarning("User not found: {Username}", userEntity.Username);
                     throw new Exception("User not found");
                 }
-                await _usersRepository.UpdateUser(userEntity);
+                _mapper.Map(userEntity, existingUser);
+                existingUser.RefreshToken =  GenerateRefreshToken();
+                existingUser.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+                await _usersRepository.UpdateUser(existingUser);
                 _logger.LogInformation("User updated successfully: {Username}", userEntity.Username);
             }
             catch (Exception ex)
@@ -48,28 +55,42 @@ namespace Server.Users.Services
             }
         }
 
-        public async Task<string?> Login(UserEntity user)
+        public async Task<TokenResponseDto?> Login(UserDto userDto)
         {
             try
             {
-                _logger.LogInformation("Attempting login for user: {Username}", user.Username);
+                _logger.LogInformation("Attempting login for user: {Username}", userDto.Username);
+                var user = _mapper.Map<UserEntity>(userDto);
                 var existingUser = await _usersRepository.Login(user);
                 if (existingUser == null)
                 {
                     _logger.LogWarning("Login failed for user: {Username}", user.Username);
                     return null;
                 }
-                var accepted = VerifyPassword(existingUser, user.PasswordHash);
-                var token = accepted ? GenerateToken(existingUser) : null;
-                    
-                return token;
+
+                if (!VerifyPassword(existingUser, user.PasswordHash))
+                {
+                    _logger.LogWarning("Invalid password for user: {Username}", user.Username);
+                    return null;
+                }
+
+                TokenResponseDto response = await CreateTokenResponse(existingUser);
+                return response;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error during login for user: {Username}", user.Username);
+                _logger.LogError(ex, "Error during login for user: {Username}", userDto.Username);
                 throw;
-
             }
+        }
+
+        private async Task<TokenResponseDto> CreateTokenResponse(UserEntity existingUser)
+        {
+            return new TokenResponseDto
+            {
+                AccessToken = GenerateToken(existingUser),
+                RefreshToken = await GenerateAndSaveRefreshToken(existingUser)
+            };
         }
 
         public async Task DeleteUser(UserEntity user)
@@ -135,6 +156,40 @@ namespace Server.Users.Services
             )
             ;
             return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
+        }
+        private async Task<UserEntity> ValidateRefreshTokenAsync(RefreshTokenRequestDto refreshTokenRequest)
+        {
+            var user = await _usersRepository.GetUserById(refreshTokenRequest.UserId);
+            if (user == null || user.RefreshToken != refreshTokenRequest.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+            {
+                return null;
+            }
+            return user;
+        }
+        private async Task<string> GenerateAndSaveRefreshToken(UserEntity user)
+        {
+            var refreshToken = GenerateRefreshToken();
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+            await _usersRepository.UpdateUser(user);
+            return refreshToken;
+        }
+        private string GenerateRefreshToken()
+        {
+            var randomBytes = new byte[64];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomBytes);
+            return Convert.ToBase64String(randomBytes);
+        }
+
+        public async Task<TokenResponseDto?> RefreshTokensAsync(RefreshTokenRequestDto refreshTokenRequest)
+        {
+            var user = await ValidateRefreshTokenAsync(refreshTokenRequest);
+            if (user == null)
+            {
+                return null;
+            }
+            return await CreateTokenResponse(user);
         }
     }
 }

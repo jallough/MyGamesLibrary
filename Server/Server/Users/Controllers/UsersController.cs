@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Server.Models;
 using Server.Users.Entities;
 using Server.Users.Services;
 
@@ -10,7 +11,7 @@ namespace Server.Users.Controllers
     public class UsersController(IUsersService _usersService) : ControllerBase
     {
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UserEntity user)
+        public async Task<IActionResult> Login([FromBody] UserDto user)
         {
             if (user == null)
             {
@@ -18,16 +19,34 @@ namespace Server.Users.Controllers
             }
             try
             {
-                var token = await _usersService.Login(user);
-                if (token == null)
+                var result = await _usersService.Login(user);
+                if (result == null)
                 {
                     return Unauthorized("Invalid username or password.");
                 }
-                return Ok(new { token });
+                return Ok(result);
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Error during login: {ex.Message}");
+            }
+        }
+        [HttpPost("refresh-token")]
+
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto refreshTokenRequest)
+        {
+            try
+            {
+                var result = await _usersService.RefreshTokensAsync(refreshTokenRequest);
+                if (result is null || result.AccessToken is null || result.RefreshToken is null)
+                {
+                    return Unauthorized("Invalid refresh token.");
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Error during token refresh: {ex.Message}");
             }
         }
         [HttpPost("register")]

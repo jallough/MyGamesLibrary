@@ -1,22 +1,26 @@
 import { Injectable, signal } from "@angular/core";
 import { HttpService } from "./HttpService";
-import { Observable, tap } from "rxjs";
+import { map, Observable, tap } from "rxjs";
 import { UserDto } from "../Dtos/UserDto";
 import {jwtDecode} from "jwt-decode";
 import { Router } from "@angular/router";
-
+export interface JwtPayload {
+    accessToken: string;
+    refreshToken: string;
+}
 @Injectable({ providedIn: 'root' })
 export class HttpUserService {
     currentUserSig = signal<UserDto | null>(null);
     constructor(private readonly http: HttpService, private readonly router : Router) {}
 
     login(user: Partial<UserDto>): Observable<any> {
-        return this.http.post<{token: string} >('Users/login', user,)
+        return this.http.post<JwtPayload>('Users/login', user,)
         .pipe(
             tap((response: any) => {
-            if (response.token) {
-                localStorage.setItem('token', response.token); // store JWT in browser
-                const userFromToken = this.decodeUserFromToken(response.token);
+            if (response) {
+                localStorage.setItem('token', response.accessToken);
+                localStorage.setItem('refreshToken', response.refreshToken); // store JWT in browser
+                const userFromToken = this.decodeUserFromToken(response.accessToken);
                 this.currentUserSig.set(userFromToken);
             }
         })
@@ -56,7 +60,22 @@ export class HttpUserService {
       this.currentUserSig.set(user);
     }
   }
-
+  refreshToken(): Observable<boolean> {
+        const refreshToken = localStorage.getItem('refreshToken');
+        if (!refreshToken) return new Observable<boolean>(sub => { sub.next(false); sub.complete(); });
+        return this.http.post<{ token: string; refreshToken: string }>('Users/refresh', refreshToken)
+            .pipe(
+                tap(resp => {
+                    if (resp.token) {
+                        localStorage.setItem('token', resp.token);
+                        if (resp.refreshToken) localStorage.setItem('refreshToken', resp.refreshToken);
+                        const userFromToken = this.decodeUserFromToken(resp.token);
+                        this.currentUserSig.set(userFromToken);
+                    }
+                }),
+                map(resp => !!resp?.token)
+            );
+    }
 
     register(user: UserDto): Observable<any> {
         return this.http.post<any>('Users/register', user);

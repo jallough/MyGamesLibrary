@@ -21,76 +21,7 @@ namespace Server.Games.Services
             if (cachedGames != null)
             {
                 _logger.LogInformation("Returning cached games for Page: {Page}, Number: {Number}", page, number);
-                if (!string.IsNullOrWhiteSpace(search))
-                {
-                    cachedGames = cachedGames.Where(g => g.Title.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
-                }
-
-                if (!string.IsNullOrWhiteSpace(filterByCategory))
-                {
-                    switch (filterByCategory)
-                    {
-                        case "action":
-                            cachedGames = cachedGames.Where(g => g.Genre == Genre.Action).ToList();
-                            break;
-                        case "adventure":
-                            cachedGames = cachedGames.Where(g => g.Genre == Genre.Adventure).ToList();
-                            break;
-                        case "rpg":
-                            cachedGames = cachedGames.Where(g => g.Genre == Genre.RPG).ToList();
-                            break;
-                        case "strategy":
-                            cachedGames = cachedGames.Where(g => g.Genre == Genre.Strategy).ToList();
-                            break;
-                        case "simulation":
-                            cachedGames = cachedGames.Where(g => g.Genre == Genre.Simulation).ToList();
-                            break;
-                        case "sports":
-                            cachedGames = cachedGames.Where(g => g.Genre == Genre.Sports).ToList();
-                            break;
-                        case "puzzle":
-                            cachedGames = cachedGames.Where(g => g.Genre == Genre.Puzzle).ToList();
-                            break;
-                        case "horror":
-                            cachedGames = cachedGames.Where(g => g.Genre == Genre.Horror).ToList();
-                            break;
-                        case "mmo":
-                            cachedGames = cachedGames.Where(g => g.Genre == Genre.MMO).ToList();
-                            break;
-                        case "indie":
-                            cachedGames = cachedGames.Where(g => g.Genre == Genre.Indie).ToList();
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                if (!string.IsNullOrWhiteSpace(orderBy))
-                {
-
-
-                    switch (orderBy)
-                    {
-                        case "titleA":
-                            cachedGames = cachedGames.OrderBy(g => g.Title).ToList();
-                            break;
-                        case "titleD":
-                            cachedGames = cachedGames.OrderByDescending(g => g.Title).ToList();
-                            break;
-                        case "genreA":
-                            cachedGames = cachedGames.OrderBy(g => g.Genre).ToList();
-                            break;
-                        case "genreD":
-                            cachedGames = cachedGames.OrderByDescending(g => g.Genre).ToList();
-                            break;
-                        case "publishDateLH":
-                            cachedGames = cachedGames.OrderBy(g => g.ReleaseDate).ToList();
-                            break;
-                        default:
-                            cachedGames = cachedGames.OrderByDescending(g => g.ReleaseDate).ToList();
-                            break;
-                    }
-                }
-                return cachedGames.Skip(page * number).Take(number).ToList();
+                return await GetWithFilter(cachedGames, orderBy, filterByCategory, search, page, number);
             }
             else
             {
@@ -316,6 +247,11 @@ namespace Server.Games.Services
             var userGames = await _gamesRepository.GetAllByUserAsync("", "", "", "", 0, int.MaxValue, userId);
             var games = await cacheservice.GetAsync<List<GamesEntity>>(_cacheKey);
             games = games?.Where(g => !userGames.Any(ug => ug.GameId == g.Id)).ToList() ?? new List<GamesEntity>();
+            return await GetWithFilter(games, orderBy, filterByCategory, search, page, batch);
+        }
+
+        private async Task<List<GamesEntity>> GetWithFilter(List<GamesEntity> games,string? orderBy, string? filterByCategory, string? search, int page, int batch)
+        {
             if (!string.IsNullOrWhiteSpace(search))
             {
                 games = games.Where(g => g.Title.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();

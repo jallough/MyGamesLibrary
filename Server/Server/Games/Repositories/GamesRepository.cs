@@ -19,7 +19,7 @@ namespace Server.Games.Repositories
             var query = GetAll();
             if (!string.IsNullOrWhiteSpace(search))
             {
-                query = query.Where(g => g.Title.Contains(search, StringComparison.OrdinalIgnoreCase));
+                query = query.Where(g => g.Title.ToLower().Contains(search.ToLower()));
             }
             switch (filterByCategory)
             {
@@ -109,7 +109,7 @@ namespace Server.Games.Repositories
 
             if (!string.IsNullOrWhiteSpace(search))
             {
-                query = query.Where(g => g.Game.Title.Contains(search, StringComparison.OrdinalIgnoreCase));
+                query = query.Where(g => g.Game.Title.ToLower().Contains(search.ToLower()));
             }
             switch (filterByCategory)
             {
@@ -154,13 +154,13 @@ namespace Server.Games.Repositories
                 case "completed":
                     query = query.Where(g => g.Status == Status.completed);
                     break;
-                case "onhold":
+                case "onHold":
                     query = query.Where(g => g.Status == Status.onhold);
                     break;
                 case "dropped":
                     query = query.Where(g => g.Status == Status.dropped);
                     break;
-                case "plantoplay":
+                case "planToPlay":
                     query = query.Where(g => g.Status == Status.plantoplay);
                     break;
                 default:

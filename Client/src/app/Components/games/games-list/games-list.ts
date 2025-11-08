@@ -66,7 +66,7 @@ export class GamesListComponent{
   ) {
     this.searchControl.valueChanges
     .pipe(
-        debounceTime(300),             // Wait 300ms after the last keystroke
+        debounceTime(100),             // Wait 100ms after the last keystroke
         distinctUntilChanged()         // Only emit if value changed
       )
     .subscribe(value => {

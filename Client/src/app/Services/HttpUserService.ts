@@ -63,17 +63,17 @@ export class HttpUserService {
   refreshToken(): Observable<boolean> {
         const refreshToken = localStorage.getItem('refreshToken');
         if (!refreshToken) return new Observable<boolean>(sub => { sub.next(false); sub.complete(); });
-        return this.http.post<{ token: string; refreshToken: string }>('Users/refresh', refreshToken)
+        return this.http.post<JwtPayload>('Users/refresh-token', refreshToken)
             .pipe(
                 tap(resp => {
-                    if (resp.token) {
-                        localStorage.setItem('token', resp.token);
+                    if (resp.accessToken) {
+                        localStorage.setItem('token', resp.accessToken);
                         if (resp.refreshToken) localStorage.setItem('refreshToken', resp.refreshToken);
-                        const userFromToken = this.decodeUserFromToken(resp.token);
+                        const userFromToken = this.decodeUserFromToken(resp.accessToken);
                         this.currentUserSig.set(userFromToken);
                     }
                 }),
-                map(resp => !!resp?.token)
+                map(resp => !!resp?.accessToken)
             );
     }
 

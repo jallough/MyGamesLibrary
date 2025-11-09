@@ -8,6 +8,10 @@ export interface JwtPayload {
     accessToken: string;
     refreshToken: string;
 }
+export interface RefreshTokenRequest {
+    refreshToken: string;
+    userId: number;
+}
 @Injectable({ providedIn: 'root' })
 export class HttpUserService {
     currentUserSig = signal<UserDto | null>(null);
@@ -62,8 +66,12 @@ export class HttpUserService {
   }
   refreshToken(): Observable<boolean> {
         const refreshToken = localStorage.getItem('refreshToken');
+        const request: RefreshTokenRequest = {
+            refreshToken: refreshToken || '',
+            userId: this.currentUserSig()?.id || 0
+        };
         if (!refreshToken) return new Observable<boolean>(sub => { sub.next(false); sub.complete(); });
-        return this.http.post<JwtPayload>('Users/refresh-token', refreshToken)
+        return this.http.post<JwtPayload>('Users/refresh-token', request)
             .pipe(
                 tap(resp => {
                     if (resp.accessToken) {
@@ -86,6 +94,7 @@ export class HttpUserService {
     
     logout() {
         localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
         this.currentUserSig.set(null);
         this.router.navigate(['/']);
     }

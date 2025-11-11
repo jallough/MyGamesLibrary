@@ -14,10 +14,11 @@ namespace Server.Users.Services
 {
     public class UsersService(IUsersRepository _usersRepository, ILogger<UsersService> _logger, IMapper _mapper, IConfiguration _config) : IUsersService
     {
-        public async Task AddUser(UserEntity userEntity)
+        public async Task AddUser(UserDto userDto)
         {
             try
             {
+                var userEntity = _mapper.Map<UserEntity>(userDto);
                 _logger.LogInformation("Adding a new user: {Username}", userEntity.Username);
                 HashPassword(ref userEntity);
                 userEntity.RefreshToken = GenerateRefreshToken();
@@ -27,11 +28,11 @@ namespace Server.Users.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error adding user: {Username}", userEntity.Username);
+                _logger.LogError(ex, "Error adding user: {Username}", userDto.Username);
                 throw;
             }
         }
-        public async Task UpdateUser(UserEntity userEntity)
+        public async Task UpdateUser(UserDto userEntity)
         {
             try
             {
@@ -93,10 +94,11 @@ namespace Server.Users.Services
             };
         }
 
-        public async Task DeleteUser(UserEntity user)
+        public async Task DeleteUser(UserDto userDto)
         {
             try
             {
+                var user = _mapper.Map<UserEntity>(userDto);
                 var existingUser = await _usersRepository.Login(user);
                 if(existingUser != null) { 
                     if (VerifyPassword(existingUser, user.PasswordHash))
@@ -118,7 +120,7 @@ namespace Server.Users.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error deleting user with ID: {UserId}", user.Id);
+                _logger.LogError(ex, "Error deleting user with ID: {UserId}", userDto.Id);
                 throw;
             }
         }

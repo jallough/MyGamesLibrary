@@ -5,10 +5,10 @@ namespace Server.Users.Services
 {
     public interface IUsersService
     {
-        Task AddUser(UserEntity userEntity);
-        Task UpdateUser(UserEntity userEntity);
+        Task AddUser(UserDto userEntity);
+        Task UpdateUser(UserDto userEntity);
         Task<TokenResponseDto?> Login(UserDto userDto);
-        Task DeleteUser(UserEntity user);
+        Task DeleteUser(UserDto user);
         Task<TokenResponseDto?> RefreshTokensAsync(RefreshTokenRequestDto refreshTokenRequest);
     }
 }

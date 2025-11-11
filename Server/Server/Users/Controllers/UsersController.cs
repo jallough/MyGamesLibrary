@@ -50,7 +50,7 @@ namespace Server.Users.Controllers
             }
         }
         [HttpPost("register")]
-        public async Task<IActionResult> AddUser([FromBody] UserEntity userEntity)
+        public async Task<IActionResult> AddUser([FromBody] UserDto userEntity)
         {
             if (userEntity == null)
             {
@@ -72,7 +72,7 @@ namespace Server.Users.Controllers
         }
         [Authorize]
         [HttpPut("update")]
-        public async Task<IActionResult> UpdateUser([FromBody] UserEntity userEntity)
+        public async Task<IActionResult> UpdateUser([FromBody] UserDto userEntity)
         {
             if (userEntity == null)
             {
@@ -97,7 +97,7 @@ namespace Server.Users.Controllers
 
         [Authorize]
         [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteUser([FromBody] UserEntity user)
+        public async Task<IActionResult> DeleteUser([FromBody] UserDto user)
         {
             try
             {
